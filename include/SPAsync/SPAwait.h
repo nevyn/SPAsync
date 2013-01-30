@@ -40,24 +40,30 @@
  */
 
 #define SPAsyncMethodBegin() \
-    SPAwaitCoroutine *__awaitCoroutine = [SPAwaitCoroutine new]; \
-    __weak SPAwaitCoroutine *__weakAwaitCoroutine = __awaitCoroutine; \
-    [__awaitCoroutine addBody:^{
+    __block SPAwaitCoroutine *__awaitCoroutine = [SPAwaitCoroutine new]; \
+    __block __weak SPAwaitCoroutine *__weakAwaitCoroutine = __awaitCoroutine; \
+    [__awaitCoroutine setBody:^ (int resumeAt) { \
+        switch (resumeAt) { \
+            case 0: \
 
 #define SPAsyncAwait(destination, awaitable) \
-    [awaitable addCallback:^(id value) { \
-        destination = value; \
-        [__weakAwaitCoroutine resume]; \
-    } on:[__weakAwaitCoroutine queueFor:self]]; \
-    }];\
-    [__awaitCoroutine addBody:^{
+    ({ \
+        [awaitable addCallback:^(id value) { \
+            destination = value; \
+            [__weakAwaitCoroutine resumeAt:__LINE__]; \
+        } on:[__weakAwaitCoroutine queueFor:self]]; \
+        return; \
+        case __LINE__:; \
+    })
 
 #define SPAsyncAwaitVoid(awaitable) \
-    [awaitable addCallback:^(id value) { \
-        [__weakAwaitCoroutine resume]; \
-    } on:[__weakAwaitCoroutine queueFor:self]]; \
-    }];\
-    [_awaitCoroutine addBody:^{
+    ({ \
+        [awaitable addCallback:^(id value) { \
+            [__weakAwaitCoroutine resumeAt:__LINE__]; \
+        } on:[__weakAwaitCoroutine queueFor:self]]; \
+        return; \
+        case __LINE__:; \
+    })
 
 #define SPAsyncMethodReturn(value) ({ \
     [__weakAwaitCoroutine yieldValue:value]; \
@@ -66,17 +72,17 @@
 })
 
 #define SPAsyncMethodEnd() \
-        [__weakAwaitCoroutine finish]; \
-    }]; \
-    [__awaitCoroutine resume]; \
+            [__weakAwaitCoroutine finish]; \
+        } /* switch ends here */ \
+    }]; /* setBody ends here */ \
+    [__awaitCoroutine resumeAt:0]; \
     return [__awaitCoroutine task];
 
 @class SPTask;
 
 @interface SPAwaitCoroutine : NSObject
-/// Add a part of the method to the coroutine
-- (void)addBody:(dispatch_block_t)body;
-- (void)resume;
+- (void)setBody:(void(^)(int resumeAt))body;
+- (void)resumeAt:(int)line;
 - (void)finish;
 /// Set the value to complete the task with, once every part of the body has completed
 - (void)yieldValue:(id)value;

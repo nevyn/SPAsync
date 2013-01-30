@@ -13,13 +13,13 @@
 
 @implementation SPAwaitTest
 
-- (SPTask *)awaitableNumber
+- (SPTask *)awaitableNumber:(NSNumber*)num
 {
     SPTaskCompletionSource *source = [SPTaskCompletionSource new];
     int64_t delayInSeconds = 0.01;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [source completeWithValue:@42];
+        [source completeWithValue:num];
     });
     return source.task;
 }
@@ -29,7 +29,7 @@
     __block NSNumber *number;
     SPAsyncMethodBegin();
     
-    SPAsyncAwait(number, [self awaitableNumber]);
+    SPAsyncAwait(number, [self awaitableNumber:@42]);
     
     NSNumber *twice = @([number intValue]*2);
     
@@ -59,6 +59,26 @@
 - (void)testMultipleReturns
 {
     SPAssertTaskCompletesWithValueAndTimeout([self multipleReturns], @(3), 0.1);
+}
+
+- (SPTask *)awaitInConditional
+{
+    __block NSNumber *number;
+    SPAsyncMethodBegin();
+    
+    if(NO) {
+        SPAsyncAwait(number, [self awaitableNumber:@1]);
+    } else {
+        SPAsyncAwait(number, [self awaitableNumber:@2]);
+    }
+    
+    SPAsyncMethodReturn(number);
+    
+    SPAsyncMethodEnd();
+}
+- (void)testAwaitInConditional
+{
+    SPAssertTaskCompletesWithValueAndTimeout([self awaitInConditional], @(2), 0.1);
 }
 
 - (SPTask*)voidMethod

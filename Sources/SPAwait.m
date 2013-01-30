@@ -3,7 +3,7 @@
 #import <SPAsync/SPTask.h>
 
 @implementation SPAwaitCoroutine {
-    NSMutableArray *_bodies;
+    void(^_body)(int resumeAt);
     SPTaskCompletionSource *_source;
     id _yieldedValue;
     BOOL _completed;
@@ -12,7 +12,6 @@
 {
     if(!(self = [super init]))
         return nil;
-    _bodies = [NSMutableArray new];
     _source = [SPTaskCompletionSource new];
     
     // We need to live until the coroutine is complete
@@ -20,18 +19,14 @@
     
     return self;
 }
-- (void)addBody:(dispatch_block_t)body
+- (void)setBody:(void(^)(int resumeAt))body;
 {
-    [_bodies addObject:[body copy]];
+    _body = [body copy];
 }
 
-- (void)resume
+- (void)resumeAt:(int)line
 {
-    NSAssert(_bodies.count > 0, @"Can't resume empty coroutine");
-    
-    dispatch_block_t body = _bodies[0];
-    [_bodies removeObjectAtIndex:0];
-    body();
+    _body(line);
 }
 
 - (void)finish
