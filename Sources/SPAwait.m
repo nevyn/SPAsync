@@ -27,19 +27,21 @@
 
 - (void)resume
 {
-    if(_bodies.count > 0) {
-        dispatch_block_t body = _bodies[0];
-        [_bodies removeObjectAtIndex:0];
-        body();
-        return;
-    } else {
-        NSAssert(!_completed, @"Didn't expect to complete twice");
-        _completed = YES;
-        [_source completeWithValue:_yieldedValue];
-        
-        // The coroutine is complete. We can remove it now.
-        CFRelease((__bridge CFTypeRef)(self));
-    }
+    NSAssert(_bodies.count > 0, @"Can't resume empty coroutine");
+    
+    dispatch_block_t body = _bodies[0];
+    [_bodies removeObjectAtIndex:0];
+    body();
+}
+
+- (void)finish
+{
+    NSAssert(!_completed, @"Didn't expect to complete twice");
+    _completed = YES;
+    [_source completeWithValue:_yieldedValue];
+    
+    // The coroutine is complete. We can remove it now.
+    CFRelease((__bridge CFTypeRef)(self));
 }
 
 - (void)yieldValue:(id)value

@@ -24,7 +24,7 @@
     return source.task;
 }
 
-- (SPTask *)slowlyMultiply
+- (SPTask *)simple
 {
     __block NSNumber *number;
     SPAsyncMethodBegin();
@@ -36,14 +36,39 @@
     SPAsyncMethodReturn(twice);    
     SPAsyncMethodEnd();
 }
-
-
 - (void)testSimple
 {
-    SPTask *task = [self slowlyMultiply];
-    
-    SPAssertTaskCompletesWithValueAndTimeout(task, @(84), 0.1);
+    SPAssertTaskCompletesWithValueAndTimeout([self simple], @(84), 0.1);
 }
 
+
+
+- (SPTask *)multipleReturns
+{
+    SPAsyncMethodBegin();
+    
+    if(NO)
+        SPAsyncMethodReturn(@2);
+    else
+        SPAsyncMethodReturn(@3);
+    
+    STFail(@"Shouldn't reach past return");
+    
+    SPAsyncMethodEnd();
+}
+- (void)testMultipleReturns
+{
+    SPAssertTaskCompletesWithValueAndTimeout([self multipleReturns], @(3), 0.1);
+}
+
+- (SPTask*)voidMethod
+{
+    SPAsyncMethodBegin();
+    SPAsyncMethodEnd();
+}
+- (void)testVoidMethod
+{
+    SPAssertTaskCompletesWithValueAndTimeout([self voidMethod], nil, 0.1);
+}
 
 @end

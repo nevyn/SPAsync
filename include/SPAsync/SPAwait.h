@@ -59,10 +59,14 @@
     }];\
     [_awaitCoroutine addBody:^{
 
-#define SPAsyncMethodReturn(value) [__weakAwaitCoroutine yieldValue:value];
+#define SPAsyncMethodReturn(value) ({ \
+    [__weakAwaitCoroutine yieldValue:value]; \
+    [__weakAwaitCoroutine finish]; \
+    return; \
+})
 
 #define SPAsyncMethodEnd() \
-        [__weakAwaitCoroutine resume]; \
+        [__weakAwaitCoroutine finish]; \
     }]; \
     [__awaitCoroutine resume]; \
     return [__awaitCoroutine task];
@@ -72,8 +76,8 @@
 @interface SPAwaitCoroutine : NSObject
 /// Add a part of the method to the coroutine
 - (void)addBody:(dispatch_block_t)body;
-/// Runs the next body, or completes the task if there are no more bodies
 - (void)resume;
+- (void)finish;
 /// Set the value to complete the task with, once every part of the body has completed
 - (void)yieldValue:(id)value;
 
