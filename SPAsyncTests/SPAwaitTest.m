@@ -27,14 +27,13 @@
 - (SPTask *)simple
 {
     __block NSNumber *number;
-    SPAsyncMethodBegin();
+    SPAsyncMethodBegin
     
-    SPAsyncAwait(number, [self awaitableNumber:@42]);
+    number = SPAsyncAwait([self awaitableNumber:@42]);
     
-    NSNumber *twice = @([number intValue]*2);
+    return @([number intValue]*2);
     
-    SPAsyncMethodReturn(twice);    
-    SPAsyncMethodEnd();
+    SPAsyncMethodEnd
 }
 - (void)testSimple
 {
@@ -45,16 +44,16 @@
 
 - (SPTask *)multipleReturns
 {
-    SPAsyncMethodBegin();
+    SPAsyncMethodBegin
     
     if(NO)
-        SPAsyncMethodReturn(@2);
+        return @2;
     else
-        SPAsyncMethodReturn(@3);
+        return @3;
     
     STFail(@"Shouldn't reach past return");
     
-    SPAsyncMethodEnd();
+    SPAsyncMethodEnd
 }
 - (void)testMultipleReturns
 {
@@ -64,17 +63,17 @@
 - (SPTask *)awaitInConditional
 {
     __block NSNumber *number;
-    SPAsyncMethodBegin();
+    SPAsyncMethodBegin
     
     if(NO) {
-        SPAsyncAwait(number, [self awaitableNumber:@1]);
+        number = SPAsyncAwait([self awaitableNumber:@1]);
     } else {
-        SPAsyncAwait(number, [self awaitableNumber:@2]);
+        number = SPAsyncAwait([self awaitableNumber:@2]);
     }
     
-    SPAsyncMethodReturn(number);
+    return number;
     
-    SPAsyncMethodEnd();
+    SPAsyncMethodEnd
 }
 - (void)testAwaitInConditional
 {
@@ -83,8 +82,8 @@
 
 - (SPTask*)voidMethod
 {
-    SPAsyncMethodBegin();
-    SPAsyncMethodEnd();
+    SPAsyncMethodBegin
+    SPAsyncMethodEnd
 }
 - (void)testVoidMethod
 {

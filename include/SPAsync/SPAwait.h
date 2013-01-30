@@ -6,7 +6,7 @@
 //
 //
 
-/** @class SPAwaitCoroutine
+/** @file SPAwait
     @abstract Emulates the behavior of the 'await' keyword in C#, letting you pause execution of a method, waiting for a value.
     @example
         - (SPTask<NSNumber> *)uploadThing:(NSData*)thing
@@ -14,14 +14,14 @@
             // Variables you want to use need to be declared as __block at the top of the method.
             __block NSData *encrypted, *hash, *confirmation;
             // Immediately after, you need to state that you are starting an async method body
-            SPAsyncMethodBegin();
+            SPAsyncMethodBegin
             
             // Do work like normal
             [self prepareFor:thing];
             
             // When you make a call to something returning an SPTask, you can wait for its value. The method
             // will actually return at this point, and resume on the next line when the encrypted value is available.
-            SPAsyncAwait(encrypted, [_encryptor encrypt:thing]);
+            encrypted = SPAsyncAwait([_encryptor encrypt:thing]);
             
             // Keep doing work as normal. This line might run much later, as we have suspended and waited for the encrypted
             // value.
@@ -29,63 +29,68 @@
             [_network send:encrypted];
             [_network send:hash];
             
-            SPAsyncAwait(confirmation, [_network read:1]);
+            confirmation = SPAsyncAwait([_network read:1]);
             
-            // If you have a value you want to return once our task completes, yield it with SPAsyncMethodReturn.
-            SPAsyncMethodReturn(@([confirmation bytes][0] == 0));
+            // Returning will complete the SPTask, sending this value to all the callbacks registered with it
+            return @([confirmation bytes][0] == 0);
             
             // You must also clean up the async method body manually.
-            SPAsyncMethodEnd();
+            SPAsyncMethodEnd
         }
  */
 
-#define SPAsyncMethodBegin() \
+/** @macro SPAsyncMethodBegin
+    @abstract Place at the beginning of an async method, after
+              variable declarations
+ */
+#define SPAsyncMethodBegin \
     __block SPAwaitCoroutine *__awaitCoroutine = [SPAwaitCoroutine new]; \
     __block __weak SPAwaitCoroutine *__weakAwaitCoroutine = __awaitCoroutine; \
-    [__awaitCoroutine setBody:^ (int resumeAt) { \
+    [__awaitCoroutine setBody:^ id (int resumeAt) { \
         switch (resumeAt) { \
-            case 0: \
+            case 0:;
 
-#define SPAsyncAwait(destination, awaitable) \
+/** @macro SPAsyncAwait
+    @abstract Pauses the execution of the calling method, waiting for the value in
+              'awaitable' to be available.
+ */
+ 
+#define SPAsyncAwait(awaitable) \
     ({ \
         [awaitable addCallback:^(id value) { \
-            destination = value; \
+            __weakAwaitCoroutine.lastAwaitedValue = value; \
             [__weakAwaitCoroutine resumeAt:__LINE__]; \
         } on:[__weakAwaitCoroutine queueFor:self]]; \
-        return; \
+        return [SPAwaitCoroutine awaitSentinel]; \
         case __LINE__:; \
+        __weakAwaitCoroutine.lastAwaitedValue; \
     })
 
-#define SPAsyncAwaitVoid(awaitable) \
-    ({ \
-        [awaitable addCallback:^(id value) { \
-            [__weakAwaitCoroutine resumeAt:__LINE__]; \
-        } on:[__weakAwaitCoroutine queueFor:self]]; \
-        return; \
-        case __LINE__:; \
-    })
-
-#define SPAsyncMethodReturn(value) ({ \
-    [__weakAwaitCoroutine yieldValue:value]; \
-    [__weakAwaitCoroutine finish]; \
-    return; \
-})
-
-#define SPAsyncMethodEnd() \
-            [__weakAwaitCoroutine finish]; \
+/** @macro SPAsyncMethodEnd
+    @abstract Place at the very end of an async method
+ */
+#define SPAsyncMethodEnd \
         } /* switch ends here */ \
+        return nil; \
     }]; /* setBody ends here */ \
-    [__awaitCoroutine resumeAt:0]; \
-    return [__awaitCoroutine task];
+    [__weakAwaitCoroutine resumeAt:0]; \
+    return [__weakAwaitCoroutine task];
+
 
 @class SPTask;
+typedef id(^SPAwaitCoroutineBody)(int resumeAt);
 
+/** @class SPAwaitCoroutine
+    @abstract Private implementation detail of SPAwait
+*/
 @interface SPAwaitCoroutine : NSObject
-- (void)setBody:(void(^)(int resumeAt))body;
+// if returned from body, the method has not completed
++ (id)awaitSentinel;
+@property(nonatomic,retain) id lastAwaitedValue;
+
+- (void)setBody:(SPAwaitCoroutineBody)body;
 - (void)resumeAt:(int)line;
 - (void)finish;
-/// Set the value to complete the task with, once every part of the body has completed
-- (void)yieldValue:(id)value;
 
 - (SPTask*)task;
 

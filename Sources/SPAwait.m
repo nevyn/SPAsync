@@ -3,7 +3,7 @@
 #import <SPAsync/SPTask.h>
 
 @implementation SPAwaitCoroutine {
-    void(^_body)(int resumeAt);
+    SPAwaitCoroutineBody _body;
     SPTaskCompletionSource *_source;
     id _yieldedValue;
     BOOL _completed;
@@ -19,14 +19,29 @@
     
     return self;
 }
-- (void)setBody:(void(^)(int resumeAt))body;
+- (void)setBody:(SPAwaitCoroutineBody)body;
 {
     _body = [body copy];
 }
 
 - (void)resumeAt:(int)line
 {
-    _body(line);
+    id ret = _body(line);
+    if(ret == [SPAwaitCoroutine awaitSentinel])
+        return;
+    
+    _yieldedValue = ret;
+    [self finish];
+}
+
++ (id)awaitSentinel
+{
+    static id sentinel;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sentinel = [NSObject new];
+    });
+    return sentinel;
 }
 
 - (void)finish
