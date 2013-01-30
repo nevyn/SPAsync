@@ -1,6 +1,6 @@
 //
 //  SPAgentTest.m
-//  Moriarty
+//  SPAsync
 //
 //  Created by Joachim Bengtsson on 2012-12-26.
 //
@@ -45,7 +45,7 @@
     if(!(self = [super init]))
         return nil;
     
-    _workQueue = dispatch_queue_create("moriarty.testworkqueue", DISPATCH_QUEUE_SERIAL);
+    _workQueue = dispatch_queue_create("SPAsync.testworkqueue", DISPATCH_QUEUE_SERIAL);
     
     return self;
 }
