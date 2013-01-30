@@ -12,7 +12,7 @@
         - (SPTask<NSNumber> *)uploadThing:(NSData*)thing
         {
             // Variables you want to use need to be declared as __block at the top of the method.
-            __block NSData *encrypted, *hash, *confirmation;
+            __block NSData *encrypted, *confirmation;
             // Immediately after, you need to state that you are starting an async method body
             SPAsyncMethodBegin
             
