@@ -17,7 +17,6 @@
 		05B6480E16B85BB60050002D /* SPTaskTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6480C16B85BB60050002D /* SPTaskTest.m */; };
 		05B6481916B85BC20050002D /* NSObject+SPInvocationGrabbing.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481516B85BC20050002D /* NSObject+SPInvocationGrabbing.m */; };
 		05B6481A16B85BC20050002D /* SPAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481616B85BC20050002D /* SPAgent.m */; };
-		05B6481B16B85BC20050002D /* SPAsync.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481716B85BC20050002D /* SPAsync.m */; };
 		05B6481C16B85BC20050002D /* SPTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481816B85BC20050002D /* SPTask.m */; };
 /* End PBXBuildFile section */
 
@@ -62,7 +61,6 @@
 		05B6481316B85BC20050002D /* SPTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPTask.h; sourceTree = "<group>"; };
 		05B6481516B85BC20050002D /* NSObject+SPInvocationGrabbing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SPInvocationGrabbing.m"; sourceTree = "<group>"; };
 		05B6481616B85BC20050002D /* SPAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPAgent.m; sourceTree = "<group>"; };
-		05B6481716B85BC20050002D /* SPAsync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPAsync.m; sourceTree = "<group>"; };
 		05B6481816B85BC20050002D /* SPTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPTask.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -160,9 +158,9 @@
 		05B6480F16B85BC20050002D /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
+				05B6481216B85BC20050002D /* SPAsync.h */,
 				05B6481016B85BC20050002D /* NSObject+SPInvocationGrabbing.h */,
 				05B6481116B85BC20050002D /* SPAgent.h */,
-				05B6481216B85BC20050002D /* SPAsync.h */,
 				05B6481316B85BC20050002D /* SPTask.h */,
 			);
 			name = Interfaces;
@@ -174,7 +172,6 @@
 			children = (
 				05B6481516B85BC20050002D /* NSObject+SPInvocationGrabbing.m */,
 				05B6481616B85BC20050002D /* SPAgent.m */,
-				05B6481716B85BC20050002D /* SPAsync.m */,
 				05B6481816B85BC20050002D /* SPTask.m */,
 			);
 			path = Sources;
@@ -280,7 +277,6 @@
 			files = (
 				05B6481916B85BC20050002D /* NSObject+SPInvocationGrabbing.m in Sources */,
 				05B6481A16B85BC20050002D /* SPAgent.m in Sources */,
-				05B6481B16B85BC20050002D /* SPAsync.m in Sources */,
 				05B6481C16B85BC20050002D /* SPTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
