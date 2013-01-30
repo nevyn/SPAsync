@@ -62,7 +62,11 @@
 
 - (id)leet
 {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
     NSAssert(_workQueue == dispatch_get_current_queue(), @"Expected getter to be called on work queue");
+#pragma clang diagnostic pop
+
     return @(1337);
 }
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "SPTaskTest.h"
-#import "SPTask.h"
+#import <SPAsync/SPTask.h>
 
 @implementation SPTaskTest
 - (void)testCallback

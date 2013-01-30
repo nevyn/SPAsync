@@ -6,7 +6,7 @@
 //
 //
 
-#import "SPTask.h"
+#import <SPAsync/SPTask.h>
 
 @interface SPTask ()
 {

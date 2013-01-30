@@ -1,4 +1,4 @@
-#import "NSObject+SPInvocationGrabbing.h"
+#import <SPAsync/NSObject+SPInvocationGrabbing.h>
 #import <execinfo.h>
 
 #pragma mark Invocation grabbing
