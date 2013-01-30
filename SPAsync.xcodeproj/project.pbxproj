@@ -18,6 +18,8 @@
 		05B6481916B85BC20050002D /* NSObject+SPInvocationGrabbing.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481516B85BC20050002D /* NSObject+SPInvocationGrabbing.m */; };
 		05B6481A16B85BC20050002D /* SPAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481616B85BC20050002D /* SPAgent.m */; };
 		05B6481C16B85BC20050002D /* SPTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481816B85BC20050002D /* SPTask.m */; };
+		05B6484116B93F2A0050002D /* SPAwait.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6484016B93F2A0050002D /* SPAwait.m */; };
+		05B6484416B94C010050002D /* SPAwaitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6484316B94C010050002D /* SPAwaitTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,10 @@
 		05B6481516B85BC20050002D /* NSObject+SPInvocationGrabbing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SPInvocationGrabbing.m"; sourceTree = "<group>"; };
 		05B6481616B85BC20050002D /* SPAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPAgent.m; sourceTree = "<group>"; };
 		05B6481816B85BC20050002D /* SPTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPTask.m; sourceTree = "<group>"; };
+		05B6483F16B93F200050002D /* SPAwait.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPAwait.h; sourceTree = "<group>"; };
+		05B6484016B93F2A0050002D /* SPAwait.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPAwait.m; sourceTree = "<group>"; };
+		05B6484216B94C010050002D /* SPAwaitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPAwaitTest.h; sourceTree = "<group>"; };
+		05B6484316B94C010050002D /* SPAwaitTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPAwaitTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +147,8 @@
 				05B6480A16B85BB60050002D /* SPAgentTest.m */,
 				05B6480B16B85BB60050002D /* SPTaskTest.h */,
 				05B6480C16B85BB60050002D /* SPTaskTest.m */,
+				05B6484216B94C010050002D /* SPAwaitTest.h */,
+				05B6484316B94C010050002D /* SPAwaitTest.m */,
 				05B647F516B85AF90050002D /* Supporting Files */,
 			);
 			path = SPAsyncTests;
@@ -162,6 +170,7 @@
 				05B6481016B85BC20050002D /* NSObject+SPInvocationGrabbing.h */,
 				05B6481116B85BC20050002D /* SPAgent.h */,
 				05B6481316B85BC20050002D /* SPTask.h */,
+				05B6483F16B93F200050002D /* SPAwait.h */,
 			);
 			name = Interfaces;
 			path = include/SPAsync;
@@ -173,6 +182,7 @@
 				05B6481516B85BC20050002D /* NSObject+SPInvocationGrabbing.m */,
 				05B6481616B85BC20050002D /* SPAgent.m */,
 				05B6481816B85BC20050002D /* SPTask.m */,
+				05B6484016B93F2A0050002D /* SPAwait.m */,
 			);
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
@@ -278,6 +288,7 @@
 				05B6481916B85BC20050002D /* NSObject+SPInvocationGrabbing.m in Sources */,
 				05B6481A16B85BC20050002D /* SPAgent.m in Sources */,
 				05B6481C16B85BC20050002D /* SPTask.m in Sources */,
+				05B6484116B93F2A0050002D /* SPAwait.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,6 +298,7 @@
 			files = (
 				05B6480D16B85BB60050002D /* SPAgentTest.m in Sources */,
 				05B6480E16B85BB60050002D /* SPTaskTest.m in Sources */,
+				05B6484416B94C010050002D /* SPAwaitTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

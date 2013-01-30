@@ -106,6 +106,10 @@
 - (void)completeWithValue:(id)value
 {
     @synchronized(_callbacks) {
+        NSAssert(!_isCompleted, @"Can't complete a task twice");
+        if(_isCompleted)
+            return;
+        
         _isCompleted = YES;
         _completedValue = value;
         for(SPCallbackHolder *holder in _callbacks) {

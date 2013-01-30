@@ -154,4 +154,11 @@
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
 }
 
+- (void)testTest
+{
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    [source completeWithValue:@(10)];
+    SPAssertTaskCompletesWithValueAndTimeout(source.task, @(10), 0.1);
+}
+
 @end
