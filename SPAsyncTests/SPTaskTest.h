@@ -30,3 +30,21 @@
     } \
     STAssertTrue(__triggered, @"Timeout reached without completion"); \
 })
+
+#define SPAssertTaskFailsWithErrorAndTimeout(task, expected, timeout) ({ \
+    __block BOOL __triggered = NO; \
+    [task addCallback:^(id value) {\
+        STFail(@"Task should have failed"); \
+        __triggered = YES; \
+    } on:dispatch_get_main_queue()]; \
+    [task addErrback:^(NSError *error) {\
+        STAssertEqualObjects(error, expected, @"Not the expected error"); \
+        __triggered = YES; \
+    } on:dispatch_get_main_queue()]; \
+    NSTimeInterval __duration = 0; \
+    while(!__triggered && __duration < timeout) {\
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01]]; \
+        __duration += 0.01; \
+    } \
+    STAssertTrue(__triggered, @"Timeout reached without completion"); \
+})

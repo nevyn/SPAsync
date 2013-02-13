@@ -103,6 +103,37 @@
     } on:dispatch_get_global_queue(0, 0)];
 }
 
++ (instancetype)awaitAll:(NSArray*)tasks
+{
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    
+    NSMutableArray *values = [NSMutableArray new];
+    NSMutableSet *remainingTasks = [NSMutableSet setWithArray:tasks];
+    
+    int i = 0;
+    for(SPTask *task in tasks) {
+        __weak SPTask *weakTask = task;
+        
+        [values addObject:[NSNull null]];
+        [[task addCallback:^(id value) {
+            
+            if(value)
+                [values replaceObjectAtIndex:i withObject:value];
+            
+            [remainingTasks removeObject:weakTask];
+            if([remainingTasks count] == 0)
+                [source completeWithValue:values];
+        } on:dispatch_get_main_queue()] addErrback:^(NSError *error) {
+            [values removeAllObjects];
+            [remainingTasks removeAllObjects];
+            [source failWithError:error];
+        } on:dispatch_get_main_queue()];
+        
+        i++;
+    }
+    return source.task;
+}
+
 - (void)completeWithValue:(id)value
 {
     @synchronized(_callbacks) {

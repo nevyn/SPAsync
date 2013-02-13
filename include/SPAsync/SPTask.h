@@ -58,6 +58,11 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
             then into `Thing` through addCallback.
   */
 - (instancetype)chain;
+
+/** @method awaitAll:
+    @return A task that will complete when all the given tasks have completed.
+ */
++ (instancetype)awaitAll:(NSArray*)tasks;
 @end
 
 

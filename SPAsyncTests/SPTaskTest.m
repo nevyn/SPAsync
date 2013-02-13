@@ -161,4 +161,34 @@
     SPAssertTaskCompletesWithValueAndTimeout(source.task, @(10), 0.1);
 }
 
+- (void)testAwaitAllSuccess
+{
+    SPTaskCompletionSource *source1 = [SPTaskCompletionSource new];
+    SPTaskCompletionSource *source2 = [SPTaskCompletionSource new];
+    SPTaskCompletionSource *nullSource = [SPTaskCompletionSource new];
+    
+    SPTask *all = [SPTask awaitAll:@[source1.task, source2.task, nullSource.task]];
+    id expected = @[@1, @2, [NSNull null]];
+    
+    [source1 completeWithValue:@1];
+    [source2 completeWithValue:@2];
+    [nullSource completeWithValue:nil];
+    
+    SPAssertTaskCompletesWithValueAndTimeout(all, expected, 0.1);
+}
+
+- (void)testAwaitAllFailure
+{
+    SPTaskCompletionSource *source1 = [SPTaskCompletionSource new];
+    SPTaskCompletionSource *source2 = [SPTaskCompletionSource new];
+    
+    SPTask *all = [SPTask awaitAll:@[source1.task, source2.task]];
+    
+    NSError *error = [NSError errorWithDomain:@"test" code:1 userInfo:nil];
+    [source1 completeWithValue:@1];
+    [source2 failWithError:error];
+    
+    SPAssertTaskFailsWithErrorAndTimeout(all, error, 0.1);
+}
+
 @end
