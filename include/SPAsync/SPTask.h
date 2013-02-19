@@ -11,7 +11,7 @@
 
 typedef void(^SPTaskCallback)(id value);
 typedef void(^SPTaskErrback)(NSError *error);
-typedef void(^SPTaskFinally)(id value, NSError *error);
+typedef void(^SPTaskFinally)(id value, NSError *error, BOOL cancelled);
 typedef id(^SPTaskThenCallback)(id value);
 typedef SPTask*(^SPTaskChainCallback)(id value);
 
@@ -69,6 +69,10 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
     @return A task that will complete when all the given tasks have completed.
  */
 + (instancetype)awaitAll:(NSArray*)tasks;
+
+
+- (void)cancel;
+@property(getter=isCancelled,readonly) BOOL cancelled;
 @end
 
 
@@ -83,6 +87,10 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
 - (void)completeWithValue:(id)value;
 /** Signal failed completion of the task to all errbacks */
 - (void)failWithError:(NSError*)error;
+
+/** If the task is cancelled, your registered handlers will be called. If you'd rather
+    poll, you can ask task.cancelled. */
+- (void)addCancellationCallback:(void(^)())cancellationCallback;
 @end
 
 

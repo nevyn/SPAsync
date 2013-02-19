@@ -191,31 +191,126 @@
     SPAssertTaskFailsWithErrorAndTimeout(all, error, 0.1);
 }
 
+- (void)testBasicCancellation
+{
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    
+    __block BOOL callbackWasRun = NO;
+    [source.task addCallback:^(id value) {
+        callbackWasRun = YES;
+    } on:dispatch_get_main_queue()];
+    
+    [source.task cancel];
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        if(!source.task.cancelled)
+            [source completeWithValue:@1];
+    });
+    
+    NSTimeInterval __elapsed = 0;
+    static const NSTimeInterval pollInterval = 0.01;
+    while(__elapsed < 0.1) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:pollInterval]];
+        __elapsed += pollInterval;
+    }
+    
+    STAssertEquals(callbackWasRun, NO, @"Callback should not have been run");
+    STAssertEquals(source.task.cancelled, YES, @"Task should be cancelled");
+}
+
+- (void)testCallbackCancellation
+{
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    
+    __block BOOL cancelled = NO;
+    [source addCancellationCallback:^{
+        cancelled = YES;
+    }];
+    
+    __block BOOL callbackWasRun = NO;
+    [source.task addCallback:^(id value) {
+        callbackWasRun = YES;
+    } on:dispatch_get_main_queue()];
+    
+    [source.task cancel];
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        if(!cancelled)
+            [source completeWithValue:@1];
+    });
+    
+    NSTimeInterval __elapsed = 0;
+    static const NSTimeInterval pollInterval = 0.01;
+    while(__elapsed < 0.1) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:pollInterval]];
+        __elapsed += pollInterval;
+    }
+    
+    STAssertEquals(callbackWasRun, NO, @"Callback should not have been run");
+    STAssertEquals(cancelled, YES, @"Cancellation callback wasn't run");
+    STAssertEquals(source.task.cancelled, YES, @"Task should be cancelled");
+}
+
+- (void)testCancellationChain
+{
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    
+    __block BOOL callbackWasRun = NO;
+    SPTask *chained = [source.task then:^id(id value) {
+        callbackWasRun = YES;
+        return nil;
+    } on:dispatch_get_main_queue()];
+    
+    [source.task cancel];
+    [source completeWithValue:@1];
+        
+    NSTimeInterval __elapsed = 0;
+    static const NSTimeInterval pollInterval = 0.01;
+    while(__elapsed < 0.1) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:pollInterval]];
+        __elapsed += pollInterval;
+    }
+
+    STAssertEquals(source.task.cancelled, YES, @"Source task should be cancelled");
+    STAssertEquals(chained.cancelled, YES, @"Chained task should be cancelled");
+    STAssertEquals(callbackWasRun, NO, @"Chained callback shouldn't have been called");
+}
+
 - (void)testFinally
 {
     SPTaskCompletionSource *successSource = [SPTaskCompletionSource new];
     SPTaskCompletionSource *failureSource = [SPTaskCompletionSource new];
+    SPTaskCompletionSource *cancellationSource = [SPTaskCompletionSource new];
     __block int i = 0;
     
-    [successSource.task addFinally:^(id value, NSError *error) {
+    [successSource.task addFinally:^(id value, NSError *error, BOOL cancelled) {
         STAssertEqualObjects(value, @1, @"Task didn't finalize with the correct value");
         STAssertNil(error, @"Task shouldn't have an error");
+        STAssertEquals(cancelled, NO, @"Task should not be cancelled");
         i++;
     } on:dispatch_get_main_queue()];
     
     NSError *expected = [NSError errorWithDomain:@"test" code:0 userInfo:nil];
-    [failureSource.task addFinally:^(id value, NSError *error) {
+    [failureSource.task addFinally:^(id value, NSError *error, BOOL cancelled) {
         STAssertEqualObjects(value, nil, @"Task failed and shouldn't have a value");
         STAssertEquals(error, expected, @"Task should have an error");
+        STAssertEquals(cancelled, NO, @"Task should not be cancelled");
         i++;
     } on:dispatch_get_main_queue()];
     
+    [cancellationSource.task addFinally:^(id value, NSError *error, BOOL cancelled) {
+        STAssertEqualObjects(value, nil, @"Task was cancelled and shouldn't have a value");
+        STAssertNil(error, @"Task was cancelled shouldn't have an error");
+        STAssertEquals(cancelled, YES, @"Task should be cancelled");
+        i++;
+    } on:dispatch_get_main_queue()];
     
     [successSource completeWithValue:@1];
     [failureSource failWithError:expected];
+    [cancellationSource.task cancel];
     
-    SPTestSpinRunloopWithCondition(i == 2, 0.1);
-    STAssertEquals(i, 2, @"A finalizer wasn't called");
+    SPTestSpinRunloopWithCondition(i == 3, 0.1);
+    STAssertEquals(i, 3, @"A finalizer wasn't called");
 }
 
 

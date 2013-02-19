@@ -13,21 +13,31 @@
     NSMutableArray *_callbacks;
     NSMutableArray *_errbacks;
     NSMutableArray *_finallys;
+    NSMutableArray *_childTasks;
     BOOL _isCompleted;
     id _completedValue;
     NSError *_completedError;
+    __weak SPTaskCompletionSource *_source;
 }
+@property(getter=isCancelled,readwrite) BOOL cancelled;
+@end
 
+@interface SPTaskCompletionSource ()
+- (void)cancel;
 @end
 
 @implementation SPTask
-- (id)init
+@synthesize cancelled = _isCancelled;
+
+- (id)initFromSource:(SPTaskCompletionSource*)source;
 {
     if(!(self = [super init]))
         return nil;
     _callbacks = [NSMutableArray new];
     _errbacks = [NSMutableArray new];
     _finallys = [NSMutableArray new];
+    _childTasks = [NSMutableArray new];
+    _source = source;
     return self;
 }
 
@@ -68,7 +78,7 @@
     @synchronized(_callbacks) {
         if(_isCompleted) {
             dispatch_async(queue, ^{
-                finally(_completedValue, _completedError);
+                finally(_completedValue, _completedError, _isCancelled);
             });
         } else {
             [_finallys addObject:[[SPCallbackHolder alloc] initWithCallback:(id)finally onQueue:queue]];
@@ -81,6 +91,7 @@
 {
     SPTaskCompletionSource *source = [SPTaskCompletionSource new];
     SPTask *then = source.task;
+    [_childTasks addObject:then];
     
     [self addCallback:^(id value) {
         id result = worker(value);
@@ -95,19 +106,21 @@
 
 - (instancetype)chain:(SPTaskChainCallback)chainer on:(dispatch_queue_t)queue
 {
-    SPTask *chain = [SPTask new];
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    SPTask *chain = source.task;
+    [_childTasks addObject:chain];
     
     [self addCallback:^(id value) {
         SPTask *workToBeProvided = chainer(value);
         [workToBeProvided addCallback:^(id value) {
-            [chain completeWithValue:value];
+            [source completeWithValue:value];
         } on:queue];
         [workToBeProvided addErrback:^(NSError *error) {
-            [chain failWithError:error];
+            [source failWithError:error];
         } on:queue];
     } on:queue];
     [self addErrback:^(NSError *error) {
-        [chain failWithError:error];
+        [source failWithError:error];
     } on:queue];
     
     return chain;
@@ -129,10 +142,12 @@
     
     int i = 0;
     for(SPTask *task in tasks) {
+        [source.task->_childTasks addObject:task];
+        
         __weak SPTask *weakTask = task;
         
         [values addObject:[NSNull null]];
-        [[task addCallback:^(id value) {
+        [[[task addCallback:^(id value) {
             
             if(value)
                 [values replaceObjectAtIndex:i withObject:value];
@@ -144,6 +159,9 @@
             [values removeAllObjects];
             [remainingTasks removeAllObjects];
             [source failWithError:error];
+        } on:dispatch_get_main_queue()] addFinally:^(id value, NSError *error, BOOL cancelled) {
+            if(cancelled)
+                [source.task cancel];
         } on:dispatch_get_main_queue()];
         
         i++;
@@ -151,10 +169,43 @@
     return source.task;
 }
 
+- (void)cancel
+{
+    BOOL shouldCancel = NO;
+    @synchronized(self) {
+        shouldCancel = !self.cancelled;
+        self.cancelled = YES;
+    }
+    
+    if(shouldCancel) {
+        [_source cancel];
+        // break any circular references between source<> task by removing
+        // callbacks and errbacks which might reference the source
+        @synchronized(_callbacks) {
+            [_callbacks removeAllObjects];
+            [_errbacks removeAllObjects];
+            
+            for(SPCallbackHolder *holder in _finallys) {
+                dispatch_async(holder.callbackQueue, ^{
+                    ((SPTaskFinally)holder.callback)(nil, nil, YES);
+                });
+            }
+            
+            [_finallys removeAllObjects];
+        }
+    }
+    
+    for(SPTask *child in _childTasks)
+        [child cancel];
+}
+
 - (void)completeWithValue:(id)value
 {
     NSAssert(!_isCompleted, @"Can't complete a task twice");
     if(_isCompleted)
+        return;
+    
+    if(self.cancelled)
         return;
     
     NSArray *callbacks = nil;
@@ -167,13 +218,16 @@
     
         for(SPCallbackHolder *holder in callbacks) {
             dispatch_async(holder.callbackQueue, ^{
+                if(self.cancelled)
+                    return;
+                
                 holder.callback(value);
             });
         }
         
         for(SPCallbackHolder *holder in finallys) {
             dispatch_async(holder.callbackQueue, ^{
-                ((SPTaskFinally)holder.callback)(value, nil);
+                ((SPTaskFinally)holder.callback)(value, nil, self.cancelled);
             });
         }
         
@@ -188,6 +242,10 @@
     NSAssert(!_isCompleted, @"Can't complete a task twice");
     if(_isCompleted)
         return;
+    
+    if(self.cancelled)
+        return;
+
     NSArray *errbacks = nil;
     NSArray *finallys = nil;
     @synchronized(_errbacks) {
@@ -204,7 +262,7 @@
         
         for(SPCallbackHolder *holder in finallys) {
             dispatch_async(holder.callbackQueue, ^{
-                ((SPTaskFinally)holder.callback)(nil, error);
+                ((SPTaskFinally)holder.callback)(nil, error, self.cancelled);
             });
         }
 
@@ -218,12 +276,21 @@
 @implementation SPTaskCompletionSource
 {
     SPTask *_task;
+    NSMutableArray *_cancellationHandlers;
+}
+
+- (id)init
+{
+    if(!(self = [super init]))
+        return nil;
+    _cancellationHandlers = [NSMutableArray new];
+    return self;
 }
 
 - (SPTask*)task
 {
     if(!_task)
-        _task = [SPTask new];
+        _task = [[SPTask alloc] initFromSource:self];
     return _task;
 }
 
@@ -236,6 +303,18 @@
 {
     [self.task failWithError:error];
 }
+
+- (void)addCancellationCallback:(void(^)())cancellationCallback
+{
+    [_cancellationHandlers addObject:cancellationCallback];
+}
+
+- (void)cancel
+{
+    for(void(^cancellationHandler)() in _cancellationHandlers)
+        cancellationHandler();
+}
+
 @end
 
 @implementation SPCallbackHolder
