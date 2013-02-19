@@ -7,6 +7,7 @@
 //
 
 #import "SPAgentTest.h"
+#import "SPTaskTest.h"
 #import <SPAsync/SPAgent.h>
 #import <SPAsync/SPTask.h>
 
@@ -28,9 +29,7 @@
     } on:dispatch_get_main_queue()];
     
     // Spin the runloop
-    while(!gotLeet)
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
-    
+    SPTestSpinRunloopWithCondition(gotLeet, 1.0);
     STAssertEquals(gotLeet, YES, @"Expected to have gotten leet by now");
 }
 

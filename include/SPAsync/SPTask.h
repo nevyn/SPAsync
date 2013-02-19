@@ -11,6 +11,7 @@
 
 typedef void(^SPTaskCallback)(id value);
 typedef void(^SPTaskErrback)(NSError *error);
+typedef void(^SPTaskFinally)(id value, NSError *error);
 typedef id(^SPTaskThenCallback)(id value);
 typedef SPTask*(^SPTaskChainCallback)(id value);
 
@@ -30,6 +31,11 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
     Like callback, but for when the task fails 
     @return self, in case you want to add more call/errbacks on the same task */
 - (instancetype)addErrback:(SPTaskErrback)errback on:(dispatch_queue_t)queue;
+
+/** @method addFinally:on:
+    Called on both success, failure and cancellation.
+    @return self, in case you want to add more call/errbacks on the same task */
+- (instancetype)addFinally:(SPTaskFinally)finally on:(dispatch_queue_t)queue;
 
 /** @method then:on:
     Add a callback, and return a task that represents the return value of that

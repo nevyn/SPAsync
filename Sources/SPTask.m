@@ -12,6 +12,7 @@
 {
     NSMutableArray *_callbacks;
     NSMutableArray *_errbacks;
+    NSMutableArray *_finallys;
     BOOL _isCompleted;
     id _completedValue;
     NSError *_completedError;
@@ -26,6 +27,7 @@
         return nil;
     _callbacks = [NSMutableArray new];
     _errbacks = [NSMutableArray new];
+    _finallys = [NSMutableArray new];
     return self;
 }
 
@@ -61,16 +63,31 @@
     return self;
 }
 
+- (instancetype)addFinally:(SPTaskFinally)finally on:(dispatch_queue_t)queue
+{
+    @synchronized(_callbacks) {
+        if(_isCompleted) {
+            dispatch_async(queue, ^{
+                finally(_completedValue, _completedError);
+            });
+        } else {
+            [_finallys addObject:[[SPCallbackHolder alloc] initWithCallback:(id)finally onQueue:queue]];
+        }
+    }
+    return self;
+}
+
 - (instancetype)then:(SPTaskThenCallback)worker on:(dispatch_queue_t)queue
 {
-    SPTask *then = [SPTask new];
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    SPTask *then = source.task;
     
     [self addCallback:^(id value) {
         id result = worker(value);
-        [then completeWithValue:result];
+        [source completeWithValue:result];
     } on:queue];
     [self addErrback:^(NSError *error) {
-        [then failWithError:error];
+        [source failWithError:error];
     } on:queue];
     
     return then;
@@ -136,33 +153,62 @@
 
 - (void)completeWithValue:(id)value
 {
+    NSAssert(!_isCompleted, @"Can't complete a task twice");
+    if(_isCompleted)
+        return;
+    
+    NSArray *callbacks = nil;
+    NSArray *finallys = nil;
     @synchronized(_callbacks) {
-        NSAssert(!_isCompleted, @"Can't complete a task twice");
-        if(_isCompleted)
-            return;
-        
         _isCompleted = YES;
         _completedValue = value;
-        for(SPCallbackHolder *holder in _callbacks) {
+        callbacks = [_callbacks copy];
+        finallys = [_finallys copy];
+    
+        for(SPCallbackHolder *holder in callbacks) {
             dispatch_async(holder.callbackQueue, ^{
                 holder.callback(value);
             });
         }
+        
+        for(SPCallbackHolder *holder in finallys) {
+            dispatch_async(holder.callbackQueue, ^{
+                ((SPTaskFinally)holder.callback)(value, nil);
+            });
+        }
+        
         [_callbacks removeAllObjects];
         [_errbacks removeAllObjects];
+        [_finallys removeAllObjects];
     }
 }
 
 - (void)failWithError:(NSError*)error
 {
+    NSAssert(!_isCompleted, @"Can't complete a task twice");
+    if(_isCompleted)
+        return;
+    NSArray *errbacks = nil;
+    NSArray *finallys = nil;
     @synchronized(_errbacks) {
         _isCompleted = YES;
         _completedError = error;
-        for(SPCallbackHolder *holder in _errbacks) {
+        errbacks = [_errbacks copy];
+        finallys = [_finallys copy];
+        
+        for(SPCallbackHolder *holder in errbacks) {
             dispatch_async(holder.callbackQueue, ^{
                 holder.callback(error);
             });
         }
+        
+        for(SPCallbackHolder *holder in finallys) {
+            dispatch_async(holder.callbackQueue, ^{
+                ((SPTaskFinally)holder.callback)(nil, error);
+            });
+        }
+
+        
         [_callbacks removeAllObjects];
         [_errbacks removeAllObjects];
     }

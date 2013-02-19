@@ -191,4 +191,33 @@
     SPAssertTaskFailsWithErrorAndTimeout(all, error, 0.1);
 }
 
+- (void)testFinally
+{
+    SPTaskCompletionSource *successSource = [SPTaskCompletionSource new];
+    SPTaskCompletionSource *failureSource = [SPTaskCompletionSource new];
+    __block int i = 0;
+    
+    [successSource.task addFinally:^(id value, NSError *error) {
+        STAssertEqualObjects(value, @1, @"Task didn't finalize with the correct value");
+        STAssertNil(error, @"Task shouldn't have an error");
+        i++;
+    } on:dispatch_get_main_queue()];
+    
+    NSError *expected = [NSError errorWithDomain:@"test" code:0 userInfo:nil];
+    [failureSource.task addFinally:^(id value, NSError *error) {
+        STAssertEqualObjects(value, nil, @"Task failed and shouldn't have a value");
+        STAssertEquals(error, expected, @"Task should have an error");
+        i++;
+    } on:dispatch_get_main_queue()];
+    
+    
+    [successSource completeWithValue:@1];
+    [failureSource failWithError:expected];
+    
+    SPTestSpinRunloopWithCondition(i == 2, 0.1);
+    STAssertEquals(i, 2, @"A finalizer wasn't called");
+}
+
+
+
 @end
