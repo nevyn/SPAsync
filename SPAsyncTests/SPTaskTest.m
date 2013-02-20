@@ -283,24 +283,30 @@
     SPTaskCompletionSource *cancellationSource = [SPTaskCompletionSource new];
     __block int i = 0;
     
-    [successSource.task addFinally:^(id value, NSError *error, BOOL cancelled) {
-        STAssertEqualObjects(value, @1, @"Task didn't finalize with the correct value");
+    [[[successSource.task addCallback:^(id value) {
+        STAssertEqualObjects(value, @1, @"Task didn't complete with the correct value");
+    } on:dispatch_get_main_queue()] addErrback:^(NSError *error) {
         STAssertNil(error, @"Task shouldn't have an error");
+    } on:dispatch_get_main_queue()] addFinally:^(BOOL cancelled) {
         STAssertEquals(cancelled, NO, @"Task should not be cancelled");
         i++;
     } on:dispatch_get_main_queue()];
     
     NSError *expected = [NSError errorWithDomain:@"test" code:0 userInfo:nil];
-    [failureSource.task addFinally:^(id value, NSError *error, BOOL cancelled) {
+    [[[failureSource.task addCallback:^(id value) {
         STAssertEqualObjects(value, nil, @"Task failed and shouldn't have a value");
+    } on:dispatch_get_main_queue()] addErrback:^(NSError *error) {
         STAssertEquals(error, expected, @"Task should have an error");
+    } on:dispatch_get_main_queue()] addFinally:^(BOOL cancelled) {
         STAssertEquals(cancelled, NO, @"Task should not be cancelled");
         i++;
     } on:dispatch_get_main_queue()];
     
-    [cancellationSource.task addFinally:^(id value, NSError *error, BOOL cancelled) {
+    [[[cancellationSource.task addCallback:^(id value) {
         STAssertEqualObjects(value, nil, @"Task was cancelled and shouldn't have a value");
+    } on:dispatch_get_main_queue()] addErrback:^(NSError *error) {
         STAssertNil(error, @"Task was cancelled shouldn't have an error");
+    } on:dispatch_get_main_queue()] addFinally:^(BOOL cancelled) {
         STAssertEquals(cancelled, YES, @"Task should be cancelled");
         i++;
     } on:dispatch_get_main_queue()];

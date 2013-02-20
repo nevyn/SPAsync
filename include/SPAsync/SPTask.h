@@ -11,7 +11,7 @@
 
 typedef void(^SPTaskCallback)(id value);
 typedef void(^SPTaskErrback)(NSError *error);
-typedef void(^SPTaskFinally)(id value, NSError *error, BOOL cancelled);
+typedef void(^SPTaskFinally)(BOOL cancelled);
 typedef id(^SPTaskThenCallback)(id value);
 typedef SPTask*(^SPTaskChainCallback)(id value);
 

@@ -78,7 +78,7 @@
     @synchronized(_callbacks) {
         if(_isCompleted) {
             dispatch_async(queue, ^{
-                finally(_completedValue, _completedError, _isCancelled);
+                finally(_isCancelled);
             });
         } else {
             [_finallys addObject:[[SPCallbackHolder alloc] initWithCallback:(id)finally onQueue:queue]];
@@ -159,7 +159,7 @@
             [values removeAllObjects];
             [remainingTasks removeAllObjects];
             [source failWithError:error];
-        } on:dispatch_get_main_queue()] addFinally:^(id value, NSError *error, BOOL cancelled) {
+        } on:dispatch_get_main_queue()] addFinally:^(BOOL cancelled) {
             if(cancelled)
                 [source.task cancel];
         } on:dispatch_get_main_queue()];
@@ -187,7 +187,7 @@
             
             for(SPCallbackHolder *holder in _finallys) {
                 dispatch_async(holder.callbackQueue, ^{
-                    ((SPTaskFinally)holder.callback)(nil, nil, YES);
+                    ((SPTaskFinally)holder.callback)(YES);
                 });
             }
             
@@ -227,7 +227,7 @@
         
         for(SPCallbackHolder *holder in finallys) {
             dispatch_async(holder.callbackQueue, ^{
-                ((SPTaskFinally)holder.callback)(value, nil, self.cancelled);
+                ((SPTaskFinally)holder.callback)(self.cancelled);
             });
         }
         
@@ -262,7 +262,7 @@
         
         for(SPCallbackHolder *holder in finallys) {
             dispatch_async(holder.callbackQueue, ^{
-                ((SPTaskFinally)holder.callback)(nil, error, self.cancelled);
+                ((SPTaskFinally)holder.callback)(self.cancelled);
             });
         }
 
