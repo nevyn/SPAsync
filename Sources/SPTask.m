@@ -136,6 +136,11 @@
 + (instancetype)awaitAll:(NSArray*)tasks
 {
     SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+		
+		if([tasks count] == 0) {
+		    [source completeWithValue:@[]];
+				return source.task;
+		}
     
     NSMutableArray *values = [NSMutableArray new];
     NSMutableSet *remainingTasks = [NSMutableSet setWithArray:tasks];
