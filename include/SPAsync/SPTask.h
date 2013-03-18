@@ -49,6 +49,31 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
 	@discussion Like addFinallyCallback:on:, but defaulting to the main queue. */
 - (instancetype)addFinallyCallback:(SPTaskFinally)finally;
 
+/** @method awaitAll:
+    @return A task that will complete when all the given tasks have completed.
+ */
++ (instancetype)awaitAll:(NSArray*)tasks;
+
+@end
+
+
+@interface SPTask (SPTaskCancellation)
+/** @property cancelled
+	Whether someone has explicitly cancelled this task.
+ */
+@property(getter=isCancelled,readonly) BOOL cancelled;
+
+/** @method cancel
+	Tells the owner of this task to cancel the operation if possible. This method also
+	tries to cancel callback calling, but unless you're on the same queue as the callback
+	being cancelled, it might trigger before the invocation of 'cancel' completes.
+ */
+- (void)cancel;
+@end
+
+
+@interface SPTask (SPTaskExtended)
+
 /** @method then:on:
     Add a callback, and return a task that represents the return value of that
     callback. Useful for doing background work with the result of some other task.
@@ -76,15 +101,6 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
             then into `Thing` through addCallback.
   */
 - (instancetype)chain;
-
-/** @method awaitAll:
-    @return A task that will complete when all the given tasks have completed.
- */
-+ (instancetype)awaitAll:(NSArray*)tasks;
-
-
-- (void)cancel;
-@property(getter=isCancelled,readonly) BOOL cancelled;
 @end
 
 

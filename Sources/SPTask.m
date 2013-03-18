@@ -15,6 +15,7 @@
     NSMutableArray *_finallys;
     NSMutableArray *_childTasks;
     BOOL _isCompleted;
+	BOOL _isCancelled;
     id _completedValue;
     NSError *_completedError;
     __weak SPTaskCompletionSource *_source;
@@ -102,52 +103,6 @@
 {
     return [self addFinallyCallback:finally on:dispatch_get_main_queue()];
 }
-    
-- (instancetype)then:(SPTaskThenCallback)worker on:(dispatch_queue_t)queue
-{
-    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
-    SPTask *then = source.task;
-    [_childTasks addObject:then];
-    
-    [self addCallback:^(id value) {
-        id result = worker(value);
-        [source completeWithValue:result];
-    } on:queue];
-    [self addErrorCallback:^(NSError *error) {
-        [source failWithError:error];
-    } on:queue];
-
-    return then;
-}
-    
-- (instancetype)chain:(SPTaskChainCallback)chainer on:(dispatch_queue_t)queue
-{
-    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
-    SPTask *chain = source.task;
-    [_childTasks addObject:chain];
-    
-    [self addCallback:^(id value) {
-        SPTask *workToBeProvided = chainer(value);
-        [workToBeProvided addCallback:^(id value) {
-            [source completeWithValue:value];
-        } on:queue];
-        [workToBeProvided addErrorCallback:^(NSError *error) {
-            [source failWithError:error];
-        } on:queue];
-    } on:queue];
-    [self addErrorCallback:^(NSError *error) {
-        [source failWithError:error];
-    } on:queue];
-
-    return chain;
-}
-
-- (instancetype)chain
-{
-    return [self chain:^SPTask *(id value) {
-        return value;
-    } on:dispatch_get_global_queue(0, 0)];
-}
 
 + (instancetype)awaitAll:(NSArray*)tasks
 {
@@ -188,36 +143,6 @@
         i++;
     }
     return source.task;
-}
-
-- (void)cancel
-{
-    BOOL shouldCancel = NO;
-    @synchronized(self) {
-        shouldCancel = !self.cancelled;
-        self.cancelled = YES;
-    }
-    
-    if(shouldCancel) {
-        [_source cancel];
-        // break any circular references between source<> task by removing
-        // callbacks and errbacks which might reference the source
-        @synchronized(_callbacks) {
-            [_callbacks removeAllObjects];
-            [_errbacks removeAllObjects];
-            
-            for(SPCallbackHolder *holder in _finallys) {
-                dispatch_async(holder.callbackQueue, ^{
-                    ((SPTaskFinally)holder.callback)(YES);
-                });
-            }
-            
-            [_finallys removeAllObjects];
-        }
-    }
-    
-    for(SPTask *child in _childTasks)
-        [child cancel];
 }
 
 - (void)completeWithValue:(id)value
@@ -293,6 +218,89 @@
     }
 }
 @end
+
+@implementation SPTask (SPTaskCancellation)
+@dynamic cancelled; // provided in main implementation block as a synthesize
+
+- (void)cancel
+{
+    BOOL shouldCancel = NO;
+    @synchronized(self) {
+        shouldCancel = !self.cancelled;
+        self.cancelled = YES;
+    }
+    
+    if(shouldCancel) {
+        [_source cancel];
+        // break any circular references between source<> task by removing
+        // callbacks and errbacks which might reference the source
+        @synchronized(_callbacks) {
+            [_callbacks removeAllObjects];
+            [_errbacks removeAllObjects];
+            
+            for(SPCallbackHolder *holder in _finallys) {
+                dispatch_async(holder.callbackQueue, ^{
+                    ((SPTaskFinally)holder.callback)(YES);
+                });
+            }
+            
+            [_finallys removeAllObjects];
+        }
+    }
+    
+    for(SPTask *child in _childTasks)
+        [child cancel];
+}
+@end
+
+@implementation SPTask (SPTaskExtended)
+- (instancetype)then:(SPTaskThenCallback)worker on:(dispatch_queue_t)queue
+{
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    SPTask *then = source.task;
+    [_childTasks addObject:then];
+    
+    [self addCallback:^(id value) {
+        id result = worker(value);
+        [source completeWithValue:result];
+    } on:queue];
+    [self addErrorCallback:^(NSError *error) {
+        [source failWithError:error];
+    } on:queue];
+
+    return then;
+}
+    
+- (instancetype)chain:(SPTaskChainCallback)chainer on:(dispatch_queue_t)queue
+{
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    SPTask *chain = source.task;
+    [_childTasks addObject:chain];
+    
+    [self addCallback:^(id value) {
+        SPTask *workToBeProvided = chainer(value);
+        [workToBeProvided addCallback:^(id value) {
+            [source completeWithValue:value];
+        } on:queue];
+        [workToBeProvided addErrorCallback:^(NSError *error) {
+            [source failWithError:error];
+        } on:queue];
+    } on:queue];
+    [self addErrorCallback:^(NSError *error) {
+        [source failWithError:error];
+    } on:queue];
+
+    return chain;
+}
+
+- (instancetype)chain
+{
+    return [self chain:^SPTask *(id value) {
+        return value;
+    } on:dispatch_get_global_queue(0, 0)];
+}
+@end
+
 
 @implementation SPTaskCompletionSource
 {
