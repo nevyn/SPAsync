@@ -27,15 +27,27 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
     @return self, in case you want to add more call/errbacks on the same task */
 - (instancetype)addCallback:(SPTaskCallback)callback on:(dispatch_queue_t)queue;
 
-/** @method addErrback:on:
+/** @method addCallback:
+	@discussion Like addCallback:on:, but defaulting to the main queue. */
+- (instancetype)addCallback:(SPTaskCallback)callback;
+
+/** @method addErrorCallback:on:
     Like callback, but for when the task fails 
     @return self, in case you want to add more call/errbacks on the same task */
-- (instancetype)addErrback:(SPTaskErrback)errback on:(dispatch_queue_t)queue;
+- (instancetype)addErrorCallback:(SPTaskErrback)errback on:(dispatch_queue_t)queue;
+
+/** @method addErrorCallback:
+	@discussion Like addErrorCallback:on:, but defaulting to the main queue. */
+- (instancetype)addErrorCallback:(SPTaskErrback)errback;
 
 /** @method addFinally:on:
     Called on both success, failure and cancellation.
     @return self, in case you want to add more call/errbacks on the same task */
-- (instancetype)addFinally:(SPTaskFinally)finally on:(dispatch_queue_t)queue;
+- (instancetype)addFinallyCallback:(SPTaskFinally)finally on:(dispatch_queue_t)queue;
+
+/** @method addFinallyCallback:on:
+	@discussion Like addFinallyCallback:on:, but defaulting to the main queue. */
+- (instancetype)addFinallyCallback:(SPTaskFinally)finally;
 
 /** @method then:on:
     Add a callback, and return a task that represents the return value of that
@@ -99,4 +111,13 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
 - (id)initWithCallback:(SPTaskCallback)callback onQueue:(dispatch_queue_t)callbackQueue;
 @property(nonatomic,assign) dispatch_queue_t callbackQueue;
 @property(nonatomic,copy) SPTaskCallback callback;
+@end
+
+
+@interface SPTask (Deprecated)
+/** @discussion use addErrorCallback:: instead */
+- (instancetype)addErrback:(SPTaskErrback)errback on:(dispatch_queue_t)queue;
+
+/** @discussion Use addFinallyCallback:: instead */
+- (instancetype)addFinally:(SPTaskFinally)finally on:(dispatch_queue_t)queue;
 @end

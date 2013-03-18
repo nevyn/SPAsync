@@ -23,7 +23,7 @@
         STAssertEquals(firstCallbackTriggered, NO, @"Callback should only trigger once");
         firstCallbackTriggered = YES;
     } on:callbackQueue];
-    [task addErrback:^(id value) {
+    [task addErrorCallback:^(id value) {
         STAssertTrue(NO, @"Error should not have triggered");
     } on:callbackQueue];
     [task addCallback:^(id value) {
@@ -51,7 +51,7 @@
     __block BOOL firstErrbackTriggered = NO;
     __block BOOL secondErrbackTriggered = NO;
     
-    [task addErrback:^(NSError *error) {
+    [task addErrorCallback:^(NSError *error) {
         STAssertEquals(error.code, (NSInteger)1337, @"Unexpected error code");
         STAssertEquals(firstErrbackTriggered, NO, @"Errback should only trigger once");
         firstErrbackTriggered = YES;
@@ -59,7 +59,7 @@
     [task addCallback:^(id value) {
         STAssertTrue(NO, @"Callback should not have triggered");
     } on:callbackQueue];
-    [task addErrback:^(NSError *error) {
+    [task addErrorCallback:^(NSError *error) {
         STAssertEquals(error.code, (NSInteger)1337, @"Unexpected error code");
         STAssertEquals(firstErrbackTriggered, YES, @"First errback should have triggered before the second");
         secondErrbackTriggered = YES;
@@ -113,7 +113,7 @@
     __block BOOL firstErrbackTriggered = NO;
     __block BOOL secondErrbackTriggered = NO;
     
-    [task addErrback:^(NSError *error) {
+    [task addErrorCallback:^(NSError *error) {
         STAssertEquals(error.code, (NSInteger)1337, @"Unexpected value");
         STAssertEquals(firstErrbackTriggered, NO, @"Callback should only trigger once");
         firstErrbackTriggered = YES;
@@ -121,7 +121,7 @@
     
     [source failWithError:[NSError errorWithDomain:@"test" code:1337 userInfo:nil]];
 
-    [task addErrback:^(NSError *error) {
+    [task addErrorCallback:^(NSError *error) {
         STAssertEquals(error.code, (NSInteger)1337, @"Unexpected value");
         secondErrbackTriggered = YES;
     } on:callbackQueue];
@@ -285,7 +285,7 @@
     
     [[[successSource.task addCallback:^(id value) {
         STAssertEqualObjects(value, @1, @"Task didn't complete with the correct value");
-    } on:dispatch_get_main_queue()] addErrback:^(NSError *error) {
+    } on:dispatch_get_main_queue()] addErrorCallback:^(NSError *error) {
         STAssertNil(error, @"Task shouldn't have an error");
     } on:dispatch_get_main_queue()] addFinally:^(BOOL cancelled) {
         STAssertEquals(cancelled, NO, @"Task should not be cancelled");
@@ -295,7 +295,7 @@
     NSError *expected = [NSError errorWithDomain:@"test" code:0 userInfo:nil];
     [[[failureSource.task addCallback:^(id value) {
         STAssertEqualObjects(value, nil, @"Task failed and shouldn't have a value");
-    } on:dispatch_get_main_queue()] addErrback:^(NSError *error) {
+    } on:dispatch_get_main_queue()] addErrorCallback:^(NSError *error) {
         STAssertEquals(error, expected, @"Task should have an error");
     } on:dispatch_get_main_queue()] addFinally:^(BOOL cancelled) {
         STAssertEquals(cancelled, NO, @"Task should not be cancelled");
@@ -304,7 +304,7 @@
     
     [[[cancellationSource.task addCallback:^(id value) {
         STAssertEqualObjects(value, nil, @"Task was cancelled and shouldn't have a value");
-    } on:dispatch_get_main_queue()] addErrback:^(NSError *error) {
+    } on:dispatch_get_main_queue()] addErrorCallback:^(NSError *error) {
         STAssertNil(error, @"Task was cancelled shouldn't have an error");
     } on:dispatch_get_main_queue()] addFinally:^(BOOL cancelled) {
         STAssertEquals(cancelled, YES, @"Task should be cancelled");

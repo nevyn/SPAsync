@@ -29,7 +29,7 @@
         STAssertEqualObjects(expected, value, @"Wrong value completed"); \
         __triggered = YES; \
     } on:dispatch_get_main_queue()]; \
-    [task addErrback:^(NSError *error) {\
+    [task addErrorCallback:^(NSError *error) {\
         STFail(@"Didn't expect task to fail"); \
         __triggered = YES; \
     } on:dispatch_get_main_queue()]; \
@@ -43,7 +43,7 @@
         STFail(@"Task should have failed"); \
         __triggered = YES; \
     } on:dispatch_get_main_queue()]; \
-    [task addErrback:^(NSError *error) {\
+    [task addErrorCallback:^(NSError *error) {\
         STAssertEqualObjects(error, expected, @"Not the expected error"); \
         __triggered = YES; \
     } on:dispatch_get_main_queue()]; \

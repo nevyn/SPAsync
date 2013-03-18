@@ -57,7 +57,12 @@
     return self;
 }
 
-- (instancetype)addErrback:(SPTaskErrback)errback on:(dispatch_queue_t)queue
+- (instancetype)addCallback:(SPTaskCallback)callback
+{
+    return [self addCallback:callback on:dispatch_get_main_queue()];
+}
+
+- (instancetype)addErrorCallback:(SPTaskErrback)errback on:(dispatch_queue_t)queue
 {
     @synchronized(_errbacks) {
         if(_isCompleted) {
@@ -73,7 +78,12 @@
     return self;
 }
 
-- (instancetype)addFinally:(SPTaskFinally)finally on:(dispatch_queue_t)queue
+- (instancetype)addErrorCallback:(SPTaskErrback)errback
+{
+    return [self addErrorCallback:errback on:dispatch_get_main_queue()];
+}
+
+- (instancetype)addFinallyCallback:(SPTaskFinally)finally on:(dispatch_queue_t)queue
 {
     @synchronized(_callbacks) {
         if(_isCompleted) {
@@ -86,7 +96,13 @@
     }
     return self;
 }
-
+    
+    
+- (instancetype)addFinallyCallback:(SPTaskFinally)finally
+{
+    return [self addFinallyCallback:finally on:dispatch_get_main_queue()];
+}
+    
 - (instancetype)then:(SPTaskThenCallback)worker on:(dispatch_queue_t)queue
 {
     SPTaskCompletionSource *source = [SPTaskCompletionSource new];
@@ -97,13 +113,13 @@
         id result = worker(value);
         [source completeWithValue:result];
     } on:queue];
-    [self addErrback:^(NSError *error) {
+    [self addErrorCallback:^(NSError *error) {
         [source failWithError:error];
     } on:queue];
-    
+
     return then;
 }
-
+    
 - (instancetype)chain:(SPTaskChainCallback)chainer on:(dispatch_queue_t)queue
 {
     SPTaskCompletionSource *source = [SPTaskCompletionSource new];
@@ -115,14 +131,14 @@
         [workToBeProvided addCallback:^(id value) {
             [source completeWithValue:value];
         } on:queue];
-        [workToBeProvided addErrback:^(NSError *error) {
+        [workToBeProvided addErrorCallback:^(NSError *error) {
             [source failWithError:error];
         } on:queue];
     } on:queue];
-    [self addErrback:^(NSError *error) {
+    [self addErrorCallback:^(NSError *error) {
         [source failWithError:error];
     } on:queue];
-    
+
     return chain;
 }
 
@@ -160,11 +176,11 @@
             [remainingTasks removeObject:weakTask];
             if([remainingTasks count] == 0)
                 [source completeWithValue:values];
-        } on:dispatch_get_main_queue()] addErrback:^(NSError *error) {
+        } on:dispatch_get_main_queue()] addErrorCallback:^(NSError *error) {
             [values removeAllObjects];
             [remainingTasks removeAllObjects];
             [source failWithError:error];
-        } on:dispatch_get_main_queue()] addFinally:^(BOOL cancelled) {
+        } on:dispatch_get_main_queue()] addFinallyCallback:^(BOOL cancelled) {
             if(cancelled)
                 [source.task cancel];
         } on:dispatch_get_main_queue()];
@@ -346,5 +362,17 @@
     if(_callbackQueue)
         dispatch_release(_callbackQueue);
     _callbackQueue = callbackQueue;
+}
+@end
+
+@implementation SPTask (Deprecated)
+- (instancetype)addErrback:(SPTaskErrback)errback on:(dispatch_queue_t)queue;
+{
+    return [self addErrorCallback:errback on:queue];
+}
+
+- (instancetype)addFinally:(SPTaskFinally)finally on:(dispatch_queue_t)queue;
+{
+    return [self addFinallyCallback:finally on:queue];
 }
 @end
