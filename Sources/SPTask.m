@@ -279,6 +279,9 @@
     
     [self addCallback:^(id value) {
         SPTask *workToBeProvided = chainer(value);
+        
+        [chain->_childTasks addObject:workToBeProvided];
+        
         [workToBeProvided addCallback:^(id value) {
             [source completeWithValue:value];
         } on:queue];

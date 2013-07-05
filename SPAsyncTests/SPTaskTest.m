@@ -10,6 +10,17 @@
 #import <SPAsync/SPTask.h>
 
 @implementation SPTaskTest
+
++ (SPTask *)delayedTask:(NSTimeInterval)delay
+{
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delay * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [source completeWithValue:nil];
+    });
+    return source.task;
+}
+
 - (void)testCallback
 {
     SPTaskCompletionSource *source = [SPTaskCompletionSource new];
@@ -275,6 +286,33 @@
     STAssertEquals(chained.cancelled, YES, @"Chained task should be cancelled");
     STAssertEquals(callbackWasRun, NO, @"Chained callback shouldn't have been called");
 }
+
+- (void)testCancellationChainCompleted
+{
+    // test that a chained task gets cancalled if a source task completes
+    // but then get cancalled
+    
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    __block SPTask *chaineeTask = nil;
+    
+    SPTask *chainerTask = [source.task chain:^SPTask *(id value) {
+        chaineeTask = [[self class] delayedTask:0.1];
+        return chaineeTask;
+    } on:dispatch_get_main_queue()];
+    
+    [source completeWithValue:@1];
+    
+    SPAssertTaskCompletesWithValueAndTimeout(source.task, @1, 0.1);
+    
+    [source.task cancel];
+
+    SPAssertTaskCancelledWithTimeout(chaineeTask, 0.2);
+    
+    STAssertTrue(source.task.cancelled, @"Source task should be cancelled");
+    STAssertTrue(chainerTask.cancelled, @"Chainer task should be cancelled");
+    STAssertTrue(chaineeTask.cancelled, @"Chainee task should be cancelled");
+}
+
 
 - (void)testFinally
 {
