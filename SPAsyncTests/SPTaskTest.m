@@ -10,6 +10,7 @@
 #import <SPAsync/SPTask.h>
 
 @implementation SPTaskTest
+
 - (void)testCallback
 {
     SPTaskCompletionSource *source = [SPTaskCompletionSource new];
@@ -275,6 +276,33 @@
     STAssertEquals(chained.cancelled, YES, @"Chained task should be cancelled");
     STAssertEquals(callbackWasRun, NO, @"Chained callback shouldn't have been called");
 }
+
+- (void)testCancellationChainCompleted
+{
+    // test that a chain that is completed and then cancelled will cancel
+    // the created task if it has not been completed yet.
+    
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    __block SPTask *delayed = nil;
+    
+    SPTask *chained = [source.task chain:^SPTask *(id value) {
+        delayed = [SPTask delay:0.1];
+        return delayed;
+    } on:dispatch_get_main_queue()];
+    
+    [source completeWithValue:@1];
+    
+    SPAssertTaskCompletesWithValueAndTimeout(source.task, @1, 0.1);
+    
+    [source.task cancel];
+
+    SPAssertTaskCancelledWithTimeout(delayed, 0.2);
+    
+    STAssertTrue(source.task.cancelled, @"Source task should be cancelled");
+    STAssertTrue(chained.cancelled, @"Chain task should be cancelled");
+    STAssertTrue(delayed.cancelled, @"Chained task should be cancelled");
+}
+
 
 - (void)testFinally
 {

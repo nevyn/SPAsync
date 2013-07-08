@@ -15,13 +15,7 @@
 
 - (SPTask *)awaitableNumber:(NSNumber*)num
 {
-    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
-    int64_t delayInSeconds = 0.01;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [source completeWithValue:num];
-    });
-    return source.task;
+    return [SPTask delay:0.01 completeValue:num];
 }
 
 - (SPTask *)simple

@@ -279,6 +279,9 @@
     
     [self addCallback:^(id value) {
         SPTask *workToBeProvided = chainer(value);
+        
+        [chain->_childTasks addObject:workToBeProvided];
+        
         [workToBeProvided addCallback:^(id value) {
             [source completeWithValue:value];
         } on:queue];
@@ -301,6 +304,26 @@
 }
 @end
 
+@implementation SPTask (SPTaskDelay)
++ (instancetype)delay:(NSTimeInterval)delay completeValue:(id)completeValue
+{
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delay * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        if (source.task.cancelled)
+            return;
+        
+        [source completeWithValue:completeValue];
+    });
+    
+    return source.task;
+}
+
++ (instancetype)delay:(NSTimeInterval)delay
+{
+    return [SPTask delay:delay completeValue:nil];
+}
+@end
 
 @implementation SPTaskCompletionSource
 {

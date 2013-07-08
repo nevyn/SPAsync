@@ -50,3 +50,17 @@
     SPTestSpinRunloopWithCondition(__triggered, timeout); \
     STAssertTrue(__triggered, @"Timeout reached without completion"); \
 })
+
+#define SPAssertTaskCancelledWithTimeout(task, timeout) ({ \
+    __block BOOL __triggered = NO; \
+    [task addCallback:^(id value) {\
+        STFail(@"Didn't expect task to complete"); \
+        __triggered = YES; \
+    } on:dispatch_get_main_queue()]; \
+    [task addErrorCallback:^(NSError *error) {\
+        STFail(@"Didn't expect task to fail"); \
+        __triggered = YES; \
+    } on:dispatch_get_main_queue()]; \
+    SPTestSpinRunloopWithCondition(!__triggered, timeout); \
+    STAssertFalse(__triggered, @"Timeout reached with completion"); \
+})

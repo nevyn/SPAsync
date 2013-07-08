@@ -104,6 +104,24 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
 @end
 
 
+@interface SPTask (SPTaskDelay)
+
+/** @method delay:completeValue:
+    Create a task that will complete after the specified time interval and
+    with specified complete value.
+    @return A new task delayed task.
+  */
++ (instancetype)delay:(NSTimeInterval)delay completeValue:(id)completeValue;
+
+/** @method delay:
+    Create a task that will complete after the specified time interval with
+    complete value nil.
+    @return A new task delayed task.
+  */
++ (instancetype)delay:(NSTimeInterval)delay;
+
+@end
+
 /** @class SPTaskCompletionSource
     Task factory for a single task that the caller knows how to complete/fail.
   */
