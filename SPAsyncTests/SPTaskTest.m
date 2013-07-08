@@ -279,15 +279,15 @@
 
 - (void)testCancellationChainCompleted
 {
-    // test that a chained task gets cancalled if a source task completes
-    // but then get cancalled
+    // test that a chain that is completed and then cancelled will cancel
+    // the created task if it has not been completed yet.
     
     SPTaskCompletionSource *source = [SPTaskCompletionSource new];
-    __block SPTask *chaineeTask = nil;
+    __block SPTask *delayed = nil;
     
-    SPTask *chainerTask = [source.task chain:^SPTask *(id value) {
-        chaineeTask = [SPTask delay:0.1];
-        return chaineeTask;
+    SPTask *chained = [source.task chain:^SPTask *(id value) {
+        delayed = [SPTask delay:0.1];
+        return delayed;
     } on:dispatch_get_main_queue()];
     
     [source completeWithValue:@1];
@@ -296,11 +296,11 @@
     
     [source.task cancel];
 
-    SPAssertTaskCancelledWithTimeout(chaineeTask, 0.2);
+    SPAssertTaskCancelledWithTimeout(delayed, 0.2);
     
     STAssertTrue(source.task.cancelled, @"Source task should be cancelled");
-    STAssertTrue(chainerTask.cancelled, @"Chainer task should be cancelled");
-    STAssertTrue(chaineeTask.cancelled, @"Chainee task should be cancelled");
+    STAssertTrue(chained.cancelled, @"Chain task should be cancelled");
+    STAssertTrue(delayed.cancelled, @"Chained task should be cancelled");
 }
 
 
