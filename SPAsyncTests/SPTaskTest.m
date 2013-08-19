@@ -400,4 +400,32 @@
     SPAssertTaskFailsWithErrorAndTimeout(awaited, error, 0.1);
 }
 
+- (void)testAwaitAll_CancelThenComplete
+{
+    SPTaskCompletionSource *source1 = [SPTaskCompletionSource new];
+    SPTaskCompletionSource *source2 = [SPTaskCompletionSource new];
+    
+    SPTask* awaited = [SPTask awaitAll:@[source2.task, source1.task]];
+    
+    [source1.task cancel];
+    
+    [source2 completeWithValue:@1];
+    
+    SPAssertTaskCancelledWithTimeout(awaited, 0.1);
+}
+
+- (void)testAwaitAll_CancelThenFail
+{
+    SPTaskCompletionSource *source1 = [SPTaskCompletionSource new];
+    SPTaskCompletionSource *source2 = [SPTaskCompletionSource new];
+    
+    SPTask* awaited = [SPTask awaitAll:@[source2.task, source1.task]];
+    
+    [source1.task cancel];
+    
+    [source2 failWithError:[NSError errorWithDomain:@"test" code:-1 userInfo:nil]];
+    
+    SPAssertTaskCancelledWithTimeout(awaited, 0.1);
+}
+
 @end
