@@ -124,7 +124,6 @@
         
         [values addObject:[NSNull null]];
         [[[task addCallback:^(id value) {
-            
             if(value)
                 [values replaceObjectAtIndex:i withObject:value];
             
@@ -132,12 +131,20 @@
             if([remainingTasks count] == 0)
                 [source completeWithValue:values];
         } on:dispatch_get_main_queue()] addErrorCallback:^(NSError *error) {
-            [values removeAllObjects];
-            [remainingTasks removeAllObjects];
+            if ([remainingTasks count] == 0) {
+                return;
+            }
+            
+            [remainingTasks removeObject:weakTask];
             [source failWithError:error];
-        } on:dispatch_get_main_queue()] addFinallyCallback:^(BOOL cancelled) {
-            if(cancelled)
+            
+            [remainingTasks makeObjectsPerformSelector:@selector(cancel)];
+            [remainingTasks removeAllObjects];
+            [values removeAllObjects];
+        } on:dispatch_get_main_queue()] addFinallyCallback:^(BOOL canceled) {
+            if(canceled) {
                 [source.task cancel];
+            }
         } on:dispatch_get_main_queue()];
         
         i++;
