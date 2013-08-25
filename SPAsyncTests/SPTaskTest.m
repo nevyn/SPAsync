@@ -347,6 +347,85 @@
     STAssertEquals(i, 3, @"A finalizer wasn't called");
 }
 
+- (void)testAwaitAll_FailThenComplete
+{
+    SPTaskCompletionSource *successSource = [SPTaskCompletionSource new];
+    SPTaskCompletionSource *failureSource = [SPTaskCompletionSource new];
+    
+    SPTask* awaited = [SPTask awaitAll:@[successSource.task, failureSource.task]];
+    
+    // when one task in an +awaitAll group fails...
+    NSError* error = [NSError errorWithDomain:@"test" code:-1 userInfo:nil];
+    [failureSource failWithError:error];
+    
+    // ...then another one resolves, an exception is thrown on the main thread in the +awaitAll callback
+    [successSource completeWithValue:@1];
+    
+    SPAssertTaskFailsWithErrorAndTimeout(awaited, error, 0.1);
+    // NOTE: STAssertThrows/NoThrow doesn't help us because the exception is thrown inside a block in +awaitAll
+}
 
+- (void)testAwaitAll_FailThenFail
+{
+    SPTaskCompletionSource *failureSource = [SPTaskCompletionSource new];
+    SPTaskCompletionSource *secondFailureSource = [SPTaskCompletionSource new];
+    
+    SPTask* awaited = [SPTask awaitAll:@[secondFailureSource.task, failureSource.task]];
+    
+    // when one task in an +awaitAll group fails...
+    NSError* error = [NSError errorWithDomain:@"test" code:-1 userInfo:nil];
+    [failureSource failWithError:error];
+    
+    // ...then another one fails, a redundant completion assertion is triggered
+    [secondFailureSource failWithError:[NSError errorWithDomain:@"test" code:-2 userInfo:nil]];
+    
+    SPAssertTaskFailsWithErrorAndTimeout(awaited, error, 0.1);
+    // NOTE: STAssertThrows/NoThrow doesn't help us because the exception is thrown inside a block in +awaitAll
+}
+
+- (void)testAwaitAll_FailThenCancel
+{
+    SPTaskCompletionSource *failureSource = [SPTaskCompletionSource new];
+    SPTaskCompletionSource *canceledSource = [SPTaskCompletionSource new];
+    
+    SPTask* awaited = [SPTask awaitAll:@[canceledSource.task, failureSource.task]];
+    
+    // when one task in an +awaitAll group fails...
+    NSError* error = [NSError errorWithDomain:@"test" code:-1 userInfo:nil];
+    [failureSource failWithError:error];
+    
+    // ...then another one is cancelled
+    [canceledSource.task cancel];
+    
+    SPAssertTaskFailsWithErrorAndTimeout(awaited, error, 0.1);
+}
+
+- (void)testAwaitAll_CancelThenComplete
+{
+    SPTaskCompletionSource *source1 = [SPTaskCompletionSource new];
+    SPTaskCompletionSource *source2 = [SPTaskCompletionSource new];
+    
+    SPTask* awaited = [SPTask awaitAll:@[source2.task, source1.task]];
+    
+    [source1.task cancel];
+    
+    [source2 completeWithValue:@1];
+    
+    SPAssertTaskCancelledWithTimeout(awaited, 0.1);
+}
+
+- (void)testAwaitAll_CancelThenFail
+{
+    SPTaskCompletionSource *source1 = [SPTaskCompletionSource new];
+    SPTaskCompletionSource *source2 = [SPTaskCompletionSource new];
+    
+    SPTask* awaited = [SPTask awaitAll:@[source2.task, source1.task]];
+    
+    [source1.task cancel];
+    
+    [source2 failWithError:[NSError errorWithDomain:@"test" code:-1 userInfo:nil]];
+    
+    SPAssertTaskCancelledWithTimeout(awaited, 0.1);
+}
 
 @end
