@@ -133,6 +133,16 @@ typedef SPA_NS(Task)*(^SPTaskChainCallback)(id value);
 /** Signal failed completion of the task to all errbacks */
 - (void)failWithError:(NSError*)error;
 
+/** Returns a block that when called calls completeWithValue:nil.
+    @example
+        SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+        [_assetWriter finishWritingWithCompletionHandler:[source voidResolver]];
+        return source.task; // task triggers callbacks when asset writer finishes writing
+*/
+- (dispatch_block_t)voidResolver;
+/** Returns a block that when called calls completeWithValue: with its first parameter*/
+- (void(^)(id))resolver;
+
 /** If the task is cancelled, your registered handlers will be called. If you'd rather
     poll, you can ask task.cancelled. */
 - (void)addCancellationCallback:(void(^)())cancellationCallback;

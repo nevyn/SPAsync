@@ -363,6 +363,20 @@
     [self.task failWithError:error];
 }
 
+- (dispatch_block_t)voidResolver
+{
+    return [^{
+        [self completeWithValue:nil];
+    } copy];
+}
+
+- (void(^)(id))resolver
+{
+    return [^(id param){
+        [self completeWithValue:param];
+    } copy];
+}
+
 - (void)addCancellationCallback:(void(^)())cancellationCallback
 {
     [_cancellationHandlers addObject:cancellationCallback];
