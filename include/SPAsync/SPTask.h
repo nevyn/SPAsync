@@ -3,22 +3,21 @@
 //  SPAsync
 //
 //  Created by Joachim Bengtsson on 2012-12-26.
-//
-//
 
 #import <Foundation/Foundation.h>
-@class SPTask;
+#import <SPAsync/SPAsyncNamespacing.h>
+@class SPA_NS(Task);
 
 typedef void(^SPTaskCallback)(id value);
 typedef void(^SPTaskErrback)(NSError *error);
 typedef void(^SPTaskFinally)(BOOL cancelled);
 typedef id(^SPTaskThenCallback)(id value);
-typedef SPTask*(^SPTaskChainCallback)(id value);
+typedef SPA_NS(Task)*(^SPTaskChainCallback)(id value);
 
 /** @class SPTask
     @abstract Any asynchronous operation that someone might want to know the result of.
  */
-@interface SPTask : NSObject
+@interface SPA_NS(Task) : NSObject
 
 /** @method addCallback:on:
     Add a callback to be called async when this task finishes, including the queue to
@@ -57,7 +56,7 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
 @end
 
 
-@interface SPTask (SPTaskCancellation)
+@interface SPA_NS(Task) (SPTaskCancellation)
 /** @property cancelled
 	Whether someone has explicitly cancelled this task.
  */
@@ -72,7 +71,7 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
 @end
 
 
-@interface SPTask (SPTaskExtended)
+@interface SPA_NS(Task) (SPTaskExtended)
 
 /** @method then:on:
     Add a callback, and return a task that represents the return value of that
@@ -104,7 +103,7 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
 @end
 
 
-@interface SPTask (SPTaskDelay)
+@interface SPA_NS(Task) (SPTaskDelay)
 
 /** @method delay:completeValue:
     Create a task that will complete after the specified time interval and
@@ -125,9 +124,9 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
 /** @class SPTaskCompletionSource
     Task factory for a single task that the caller knows how to complete/fail.
   */
-@interface SPTaskCompletionSource : NSObject
+@interface SPA_NS(TaskCompletionSource) : NSObject
 /** The task that this source can mark as completed. */
-- (SPTask*)task;
+- (SPA_NS(Task)*)task;
 
 /** Signal successful completion of the task to all callbacks */
 - (void)completeWithValue:(id)value;
@@ -141,14 +140,14 @@ typedef SPTask*(^SPTaskChainCallback)(id value);
 
 
 /** Convenience holder of a callback and the queue that the callback should be called on */
-@interface SPCallbackHolder : NSObject
+@interface SPA_NS(CallbackHolder) : NSObject
 - (id)initWithCallback:(SPTaskCallback)callback onQueue:(dispatch_queue_t)callbackQueue;
 @property(nonatomic,assign) dispatch_queue_t callbackQueue;
 @property(nonatomic,copy) SPTaskCallback callback;
 @end
 
 
-@interface SPTask (Deprecated)
+@interface SPA_NS(Task) (Deprecated)
 /** @discussion use addErrorCallback:: instead */
 - (instancetype)addErrback:(SPTaskErrback)errback on:(dispatch_queue_t)queue;
 

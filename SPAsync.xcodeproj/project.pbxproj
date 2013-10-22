@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0519EFE01816CCC100CFDCA4 /* SPAsyncNamespacing.h in Headers */ = {isa = PBXBuildFile; fileRef = 0519EFDF1816CCC100CFDCA4 /* SPAsyncNamespacing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B647DE16B85AF90050002D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B647DD16B85AF90050002D /* Foundation.framework */; };
 		05B647ED16B85AF90050002D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B647EC16B85AF90050002D /* SenTestingKit.framework */; };
 		05B647EF16B85AF90050002D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B647EE16B85AF90050002D /* UIKit.framework */; };
@@ -55,6 +56,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0519EFDF1816CCC100CFDCA4 /* SPAsyncNamespacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPAsyncNamespacing.h; sourceTree = "<group>"; };
 		05B647DA16B85AF90050002D /* libSPAsync.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSPAsync.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B647DD16B85AF90050002D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		05B647E116B85AF90050002D /* SPAsync-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SPAsync-Prefix.pch"; path = "Support/SPAsync-Prefix.pch"; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 				05B6481116B85BC20050002D /* SPAgent.h */,
 				05B6481316B85BC20050002D /* SPTask.h */,
 				05B6483F16B93F200050002D /* SPAwait.h */,
+				0519EFDF1816CCC100CFDCA4 /* SPAsyncNamespacing.h */,
 			);
 			name = Interfaces;
 			path = include/SPAsync;
@@ -235,6 +238,7 @@
 				05BBF3E116EF301C0011E948 /* SPAsync.h in Headers */,
 				05BBF3E216EF301C0011E948 /* NSObject+SPInvocationGrabbing.h in Headers */,
 				05BBF3E316EF301C0011E948 /* SPAgent.h in Headers */,
+				0519EFE01816CCC100CFDCA4 /* SPAsyncNamespacing.h in Headers */,
 				05BBF3E416EF301C0011E948 /* SPTask.h in Headers */,
 				05BBF3E516EF301C0011E948 /* SPAwait.h in Headers */,
 			);
@@ -473,7 +477,6 @@
 				DSTROOT = /tmp/SPAsync.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support/SPAsync-Prefix.pch";
-				HEADER_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -486,7 +489,6 @@
 				DSTROOT = /tmp/SPAsync.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support/SPAsync-Prefix.pch";
-				HEADER_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

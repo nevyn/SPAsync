@@ -8,7 +8,7 @@
 
 #import <SPAsync/SPTask.h>
 
-@interface SPTask ()
+@interface SPA_NS(Task) ()
 {
     NSMutableArray *_callbacks;
     NSMutableArray *_errbacks;
@@ -18,19 +18,19 @@
 	BOOL _isCancelled;
     id _completedValue;
     NSError *_completedError;
-    __weak SPTaskCompletionSource *_source;
+    __weak SPA_NS(TaskCompletionSource) *_source;
 }
 @property(getter=isCancelled,readwrite) BOOL cancelled;
 @end
 
-@interface SPTaskCompletionSource ()
+@interface SPA_NS(TaskCompletionSource) ()
 - (void)cancel;
 @end
 
-@implementation SPTask
+@implementation SPA_NS(Task)
 @synthesize cancelled = _isCancelled;
 
-- (id)initFromSource:(SPTaskCompletionSource*)source;
+- (id)initFromSource:(SPA_NS(TaskCompletionSource)*)source;
 {
     if(!(self = [super init]))
         return nil;
@@ -52,7 +52,7 @@
                 });
             }
         } else {
-            [_callbacks addObject:[[SPCallbackHolder alloc] initWithCallback:callback onQueue:queue]];
+            [_callbacks addObject:[[SPA_NS(CallbackHolder) alloc] initWithCallback:callback onQueue:queue]];
         }
     }
     return self;
@@ -73,7 +73,7 @@
                 });
             }
         } else {
-            [_errbacks addObject:[[SPCallbackHolder alloc] initWithCallback:errback onQueue:queue]];
+            [_errbacks addObject:[[SPA_NS(CallbackHolder) alloc] initWithCallback:errback onQueue:queue]];
         }
     }
     return self;
@@ -92,7 +92,7 @@
                 finally(_isCancelled);
             });
         } else {
-            [_finallys addObject:[[SPCallbackHolder alloc] initWithCallback:(id)finally onQueue:queue]];
+            [_finallys addObject:[[SPA_NS(CallbackHolder) alloc] initWithCallback:(id)finally onQueue:queue]];
         }
     }
     return self;
@@ -106,7 +106,7 @@
 
 + (instancetype)awaitAll:(NSArray*)tasks
 {
-    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    SPA_NS(TaskCompletionSource) *source = [SPA_NS(TaskCompletionSource) new];
 		
 		if([tasks count] == 0) {
 		    [source completeWithValue:@[]];
@@ -117,10 +117,10 @@
     NSMutableSet *remainingTasks = [NSMutableSet setWithArray:tasks];
     
     int i = 0;
-    for(SPTask *task in tasks) {
+    for(SPA_NS(Task) *task in tasks) {
         [source.task->_childTasks addObject:task];
         
-        __weak SPTask *weakTask = task;
+        __weak SPA_NS(Task) *weakTask = task;
         
         [values addObject:[NSNull null]];
         [[[task addCallback:^(id value) {
@@ -169,7 +169,7 @@
         callbacks = [_callbacks copy];
         finallys = [_finallys copy];
     
-        for(SPCallbackHolder *holder in callbacks) {
+        for(SPA_NS(CallbackHolder) *holder in callbacks) {
             dispatch_async(holder.callbackQueue, ^{
                 if(self.cancelled)
                     return;
@@ -178,7 +178,7 @@
             });
         }
         
-        for(SPCallbackHolder *holder in finallys) {
+        for(SPA_NS(CallbackHolder) *holder in finallys) {
             dispatch_async(holder.callbackQueue, ^{
                 ((SPTaskFinally)holder.callback)(self.cancelled);
             });
@@ -207,13 +207,13 @@
         errbacks = [_errbacks copy];
         finallys = [_finallys copy];
         
-        for(SPCallbackHolder *holder in errbacks) {
+        for(SPA_NS(CallbackHolder) *holder in errbacks) {
             dispatch_async(holder.callbackQueue, ^{
                 holder.callback(error);
             });
         }
         
-        for(SPCallbackHolder *holder in finallys) {
+        for(SPA_NS(CallbackHolder) *holder in finallys) {
             dispatch_async(holder.callbackQueue, ^{
                 ((SPTaskFinally)holder.callback)(self.cancelled);
             });
@@ -226,7 +226,7 @@
 }
 @end
 
-@implementation SPTask (SPTaskCancellation)
+@implementation SPA_NS(Task) (SPTaskCancellation)
 @dynamic cancelled; // provided in main implementation block as a synthesize
 
 - (void)cancel
@@ -245,7 +245,7 @@
             [_callbacks removeAllObjects];
             [_errbacks removeAllObjects];
             
-            for(SPCallbackHolder *holder in _finallys) {
+            for(SPA_NS(CallbackHolder) *holder in _finallys) {
                 dispatch_async(holder.callbackQueue, ^{
                     ((SPTaskFinally)holder.callback)(YES);
                 });
@@ -255,16 +255,16 @@
         }
     }
     
-    for(SPTask *child in _childTasks)
+    for(SPA_NS(Task) *child in _childTasks)
         [child cancel];
 }
 @end
 
-@implementation SPTask (SPTaskExtended)
+@implementation SPA_NS(Task) (SPTaskExtended)
 - (instancetype)then:(SPTaskThenCallback)worker on:(dispatch_queue_t)queue
 {
-    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
-    SPTask *then = source.task;
+    SPA_NS(TaskCompletionSource) *source = [SPA_NS(TaskCompletionSource) new];
+    SPA_NS(Task) *then = source.task;
     [_childTasks addObject:then];
     
     [self addCallback:^(id value) {
@@ -280,12 +280,12 @@
     
 - (instancetype)chain:(SPTaskChainCallback)chainer on:(dispatch_queue_t)queue
 {
-    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
-    SPTask *chain = source.task;
+    SPA_NS(TaskCompletionSource) *source = [SPA_NS(TaskCompletionSource) new];
+    SPA_NS(Task) *chain = source.task;
     [_childTasks addObject:chain];
     
     [self addCallback:^(id value) {
-        SPTask *workToBeProvided = chainer(value);
+        SPA_NS(Task) *workToBeProvided = chainer(value);
         
         [chain->_childTasks addObject:workToBeProvided];
         
@@ -305,16 +305,16 @@
 
 - (instancetype)chain
 {
-    return [self chain:^SPTask *(id value) {
+    return [self chain:^SPA_NS(Task) *(id value) {
         return value;
     } on:dispatch_get_global_queue(0, 0)];
 }
 @end
 
-@implementation SPTask (SPTaskDelay)
+@implementation SPA_NS(Task) (SPTaskDelay)
 + (instancetype)delay:(NSTimeInterval)delay completeValue:(id)completeValue
 {
-    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    SPA_NS(TaskCompletionSource) *source = [SPA_NS(TaskCompletionSource) new];
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delay * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         if (source.task.cancelled)
@@ -328,13 +328,13 @@
 
 + (instancetype)delay:(NSTimeInterval)delay
 {
-    return [SPTask delay:delay completeValue:nil];
+    return [SPA_NS(Task) delay:delay completeValue:nil];
 }
 @end
 
-@implementation SPTaskCompletionSource
+@implementation SPA_NS(TaskCompletionSource)
 {
-    SPTask *_task;
+    SPA_NS(Task) *_task;
     NSMutableArray *_cancellationHandlers;
 }
 
@@ -346,10 +346,10 @@
     return self;
 }
 
-- (SPTask*)task
+- (SPA_NS(Task)*)task
 {
     if(!_task)
-        _task = [[SPTask alloc] initFromSource:self];
+        _task = [[SPA_NS(Task) alloc] initFromSource:self];
     return _task;
 }
 
@@ -376,7 +376,7 @@
 
 @end
 
-@implementation SPCallbackHolder
+@implementation SPA_NS(CallbackHolder)
 - (id)initWithCallback:(SPTaskCallback)callback onQueue:(dispatch_queue_t)callbackQueue
 {
     if(!(self = [super init]))
@@ -403,7 +403,7 @@
 }
 @end
 
-@implementation SPTask (Deprecated)
+@implementation SPA_NS(Task) (Deprecated)
 - (instancetype)addErrback:(SPTaskErrback)errback on:(dispatch_queue_t)queue;
 {
     return [self addErrorCallback:errback on:queue];
