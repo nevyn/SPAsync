@@ -44,3 +44,9 @@ Experimental copy of C# 5's "await" keyword, using the preprocessor.
         
         SPAsyncMethodEnd
     }
+
+
+Extensions
+----------
+
+In the Extensions folder you'll find extensions to other libraries, making them compatible with SPTask in various ways. You'll have to compile these in on your own when you need them; otherwise they would become dependencies for this library.

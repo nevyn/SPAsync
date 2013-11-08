@@ -57,6 +57,8 @@
 
 /* Begin PBXFileReference section */
 		0519EFDF1816CCC100CFDCA4 /* SPAsyncNamespacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPAsyncNamespacing.h; sourceTree = "<group>"; };
+		05B16D20182D9CAC00025797 /* UIView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIView.h; sourceTree = "<group>"; };
+		05B16D23182D9D9500025797 /* UIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIView.m; sourceTree = "<group>"; };
 		05B647DA16B85AF90050002D /* libSPAsync.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSPAsync.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B647DD16B85AF90050002D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		05B647E116B85AF90050002D /* SPAsync-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SPAsync-Prefix.pch"; path = "Support/SPAsync-Prefix.pch"; sourceTree = "<group>"; };
@@ -119,6 +121,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05B16D1F182D9CAC00025797 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				05B16D20182D9CAC00025797 /* UIView.h */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		05B16D21182D9D8A00025797 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				05B16D22182D9D8A00025797 /* UIKit */,
+			);
+			path = Extensions;
+			sourceTree = SOURCE_ROOT;
+		};
+		05B16D22182D9D8A00025797 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				05B16D23182D9D9500025797 /* UIView.m */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
 		05B647CF16B85AF90050002D = {
 			isa = PBXGroup;
 			children = (
@@ -156,6 +182,7 @@
 			children = (
 				05B6480F16B85BC20050002D /* Interfaces */,
 				05B6481416B85BC20050002D /* Sources */,
+				05B16D21182D9D8A00025797 /* Extensions */,
 				05B647E016B85AF90050002D /* Supporting Files */,
 			);
 			path = SPAsync;
@@ -202,6 +229,7 @@
 				05B6481316B85BC20050002D /* SPTask.h */,
 				05B6483F16B93F200050002D /* SPAwait.h */,
 				0519EFDF1816CCC100CFDCA4 /* SPAsyncNamespacing.h */,
+				05B16D1F182D9CAC00025797 /* UIKit */,
 			);
 			name = Interfaces;
 			path = include/SPAsync;
