@@ -289,12 +289,7 @@
         
         [chain->_childTasks addObject:workToBeProvided];
         
-        [workToBeProvided addCallback:^(id value) {
-            [source completeWithValue:value];
-        } on:queue];
-        [workToBeProvided addErrorCallback:^(NSError *error) {
-            [source failWithError:error];
-        } on:queue];
+        [source completeWithTask:workToBeProvided];
     } on:queue];
     [self addErrorCallback:^(NSError *error) {
         [source failWithError:error];
@@ -361,6 +356,15 @@
 - (void)failWithError:(NSError*)error
 {
     [self.task failWithError:error];
+}
+
+- (void)completeWithTask:(SPA_NS(Task)*)task
+{
+    [[task addCallback:^(id value) {
+        [self.task completeWithValue:value];
+    } on:dispatch_get_global_queue(0, 0)] addErrorCallback:^(NSError *error) {
+        [self.task failWithError:error];
+    } on:dispatch_get_global_queue(0, 0)];
 }
 
 - (dispatch_block_t)voidResolver

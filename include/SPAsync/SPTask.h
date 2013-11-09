@@ -133,6 +133,9 @@ typedef SPA_NS(Task)*(^SPTaskChainCallback)(id value);
 /** Signal failed completion of the task to all errbacks */
 - (void)failWithError:(NSError*)error;
 
+/** Signal completion for this source's task based on another task. */
+- (void)completeWithTask:(SPA_NS(Task)*)task;
+
 /** Returns a block that when called calls completeWithValue:nil.
     @example
         SPTaskCompletionSource *source = [SPTaskCompletionSource new];
