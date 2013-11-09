@@ -306,7 +306,7 @@
 }
 @end
 
-@implementation SPA_NS(Task) (SPTaskDelay)
+@implementation SPA_NS(Task) (SPTaskConvenience)
 + (instancetype)delay:(NSTimeInterval)delay completeValue:(id)completeValue
 {
     SPA_NS(TaskCompletionSource) *source = [SPA_NS(TaskCompletionSource) new];
@@ -324,6 +324,26 @@
 + (instancetype)delay:(NSTimeInterval)delay
 {
     return [SPA_NS(Task) delay:delay completeValue:nil];
+}
+
++ (instancetype)performWork:(SPTaskWorkGeneratingCallback)work onQueue:(dispatch_queue_t)queue;
+{
+    SPA_NS(TaskCompletionSource) *source = [SPA_NS(TaskCompletionSource) new];
+    dispatch_async(queue, ^{
+        id value = work();
+        [source completeWithValue:value];
+    });
+    return source.task;
+}
+
++ (instancetype)fetchWork:(SPTaskTaskGeneratingCallback)work onQueue:(dispatch_queue_t)queue
+{
+    SPA_NS(TaskCompletionSource) *source = [SPA_NS(TaskCompletionSource) new];
+    dispatch_async(queue, ^{
+        SPA_NS(Task) *task = work();
+        [source completeWithTask:task];
+    });
+    return source.task;
 }
 @end
 

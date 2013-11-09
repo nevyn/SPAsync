@@ -12,6 +12,8 @@ typedef void(^SPTaskCallback)(id value);
 typedef void(^SPTaskErrback)(NSError *error);
 typedef void(^SPTaskFinally)(BOOL cancelled);
 typedef id(^SPTaskThenCallback)(id value);
+typedef id(^SPTaskWorkGeneratingCallback)();
+typedef SPA_NS(Task*)(^SPTaskTaskGeneratingCallback)();
 typedef SPA_NS(Task)*(^SPTaskChainCallback)(id value);
 
 /** @class SPTask
@@ -103,7 +105,16 @@ typedef SPA_NS(Task)*(^SPTaskChainCallback)(id value);
 @end
 
 
-@interface SPA_NS(Task) (SPTaskDelay)
+@interface SPA_NS(Task) (SPTaskConvenience)
+
+/** @method performWork:onQueue:
+    Convenience method to do work on a specified queue, completing the task with the value
+    returned from the block. */
++ (instancetype)performWork:(SPTaskWorkGeneratingCallback)work onQueue:(dispatch_queue_t)queue;
+/** @method fetchWork:onQueue:
+    Like performWork:onQueue, but returning a task from the block that we'll wait on before
+    completing the task. */
++ (instancetype)fetchWork:(SPTaskTaskGeneratingCallback)work onQueue:(dispatch_queue_t)queue;
 
 /** @method delay:completeValue:
     Create a task that will complete after the specified time interval and
