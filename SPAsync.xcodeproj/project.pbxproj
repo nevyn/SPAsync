@@ -57,6 +57,8 @@
 
 /* Begin PBXFileReference section */
 		0519EFDF1816CCC100CFDCA4 /* SPAsyncNamespacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPAsyncNamespacing.h; sourceTree = "<group>"; };
+		057E7ECB182E8302009D0318 /* UIScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollView.h; sourceTree = "<group>"; };
+		057E7ECC182E830C009D0318 /* UIScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollView.m; sourceTree = "<group>"; };
 		05B16D20182D9CAC00025797 /* UIView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIView.h; sourceTree = "<group>"; };
 		05B16D23182D9D9500025797 /* UIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIView.m; sourceTree = "<group>"; };
 		05B647DA16B85AF90050002D /* libSPAsync.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSPAsync.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				05B16D20182D9CAC00025797 /* UIView.h */,
+				057E7ECB182E8302009D0318 /* UIScrollView.h */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				05B16D23182D9D9500025797 /* UIView.m */,
+				057E7ECC182E830C009D0318 /* UIScrollView.m */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
