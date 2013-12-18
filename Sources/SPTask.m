@@ -65,7 +65,7 @@
 
 - (instancetype)addErrorCallback:(SPTaskErrback)errback on:(dispatch_queue_t)queue
 {
-    @synchronized(_errbacks) {
+    @synchronized(_callbacks) {
         if(_isCompleted) {
             if(_completedError) {
                 dispatch_async(queue, ^{
@@ -201,7 +201,7 @@
 
     NSArray *errbacks = nil;
     NSArray *finallys = nil;
-    @synchronized(_errbacks) {
+    @synchronized(_callbacks) {
         _isCompleted = YES;
         _completedError = error;
         errbacks = [_errbacks copy];
