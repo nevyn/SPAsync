@@ -358,13 +358,12 @@
     if(!(self = [super init]))
         return nil;
     _cancellationHandlers = [NSMutableArray new];
+    _task = [[SPA_NS(Task) alloc] initFromSource:self];
     return self;
 }
 
 - (SPA_NS(Task)*)task
 {
-    if(!_task)
-        _task = [[SPA_NS(Task) alloc] initFromSource:self];
     return _task;
 }
 
