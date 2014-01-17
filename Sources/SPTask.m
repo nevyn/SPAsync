@@ -345,6 +345,21 @@
     });
     return source.task;
 }
+
++ (instancetype)completedTask:(id)completeValue;
+{
+	SPA_NS(TaskCompletionSource) *source = [SPA_NS(TaskCompletionSource) new];
+	[source completeWithValue:completeValue];
+	return source.task;
+}
+
++ (instancetype)failedTask:(NSError*)failure
+{
+	SPA_NS(TaskCompletionSource) *source = [SPA_NS(TaskCompletionSource) new];
+	[source failWithError:failure];
+	return source.task;
+}
+
 @end
 
 @implementation SPA_NS(TaskCompletionSource)

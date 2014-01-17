@@ -130,6 +130,18 @@ typedef SPA_NS(Task)*(^SPTaskChainCallback)(id value);
   */
 + (instancetype)delay:(NSTimeInterval)delay;
 
+/** @method completedTask:
+	Convenience method for when an asynchronous caller happens to immediately have an
+	available value.
+	@return A new task with a completed value. */
++ (instancetype)completedTask:(id)completeValue;
+
+/** @method failedTask:
+	Convenience method for when an asynchronous caller happens to immediately knows it
+	will fail with a specific failure.
+	@return A new task with an associated error. */
++ (instancetype)failedTask:(NSError*)failure;
+
 @end
 
 /** @class SPTaskCompletionSource
