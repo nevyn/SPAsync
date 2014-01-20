@@ -447,10 +447,12 @@
 
 - (void)setCallbackQueue:(dispatch_queue_t)callbackQueue
 {
+#if !OS_OBJECT_USE_OBJC_RETAIN_RELEASE
     if(callbackQueue)
         dispatch_retain(callbackQueue);
     if(_callbackQueue)
         dispatch_release(_callbackQueue);
+#endif
     _callbackQueue = callbackQueue;
 }
 @end
