@@ -6,6 +6,8 @@
 //
 //
 
+#import <setjmp.h>
+
 /** @file SPAwait
     @abstract Emulates the behavior of the 'await' keyword in C#, letting you pause execution of a method, waiting for a value.
     @example
@@ -45,10 +47,11 @@
  */
 #define SPAsyncMethodBegin \
     __block SPAwaitCoroutine *__awaitCoroutine = [SPAwaitCoroutine new]; \
+	__block \
     __block __weak SPAwaitCoroutine *__weakAwaitCoroutine = __awaitCoroutine; \
-    [__awaitCoroutine setBody:^ id (int resumeAt) { \
-        switch (resumeAt) { \
-            case 0:;
+    [__awaitCoroutine setBody:^ id () { \
+		if(__weakAwaitCoroutine.needsResuming) \
+			longjmp(*__weakAwaitCoroutine.resumeAt, 1);
 
 /** @macro SPAsyncAwait
     @abstract Pauses the execution of the calling method, waiting for the value in
@@ -56,29 +59,20 @@
  */
  
 #define SPAsyncAwait(awaitable) \
-    ({ \
-        [awaitable addCallback:^(id value) { \
-            __weakAwaitCoroutine.lastAwaitedValue = value; \
-            [__weakAwaitCoroutine resumeAt:__LINE__]; \
-        } on:[__weakAwaitCoroutine queueFor:self]]; \
-        return [SPAwaitCoroutine awaitSentinel]; \
-        case __LINE__:; \
-        __weakAwaitCoroutine.lastAwaitedValue; \
-    })
+    ({ id v = [__weakAwaitCoroutine await:awaitable]; if(v == [SPAwaitCoroutine awaitSentinel]) return v; v; })
 
 /** @macro SPAsyncMethodEnd
     @abstract Place at the very end of an async method
  */
 #define SPAsyncMethodEnd \
-        } /* switch ends here */ \
         return nil; \
     }]; /* setBody ends here */ \
-    [__weakAwaitCoroutine resumeAt:0]; \
+    [__weakAwaitCoroutine resume]; \
     return [__weakAwaitCoroutine task];
 
 
 @class SPTask;
-typedef id(^SPAwaitCoroutineBody)(int resumeAt);
+typedef id(^SPAwaitCoroutineBody)();
 
 /** @class SPAwaitCoroutine
     @abstract Private implementation detail of SPAwait
@@ -89,11 +83,16 @@ typedef id(^SPAwaitCoroutineBody)(int resumeAt);
 @property(nonatomic,retain) id lastAwaitedValue;
 
 - (void)setBody:(SPAwaitCoroutineBody)body;
-- (void)resumeAt:(int)line;
+- (void)resume;
 - (void)finish;
 
 - (SPTask*)task;
 
 /// works out a suitable queue to continue running on
 - (dispatch_queue_t)queueFor:(id)object;
+
+// impl detail
+- (id)await:(SPTask*)awaitable;
+- (jmp_buf*)resumeAt;
+@property(nonatomic) BOOL needsResuming;
 @end

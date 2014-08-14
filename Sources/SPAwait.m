@@ -7,6 +7,7 @@
     SPTaskCompletionSource *_source;
     id _yieldedValue;
     BOOL _completed;
+	jmp_buf _resumeAt;
 }
 - (id)init
 {
@@ -24,9 +25,24 @@
     _body = [body copy];
 }
 
-- (void)resumeAt:(int)line
+- (id)await:(SPTask*)awaitable
 {
-    id ret = _body(line);
+	__weak typeof(self) weakSelf = self;
+	[awaitable addCallback:^(id value) {
+		weakSelf.lastAwaitedValue = value;
+		[weakSelf resume];
+	} on:[weakSelf queueFor:self]];
+	
+	self.needsResuming = YES;
+	if(setjmp(*self.resumeAt) == 0)
+		return [SPAwaitCoroutine awaitSentinel];
+	
+	return self.lastAwaitedValue;
+}
+
+- (void)resume
+{
+    id ret = _body();
     if(ret == [SPAwaitCoroutine awaitSentinel])
         return;
     
@@ -71,6 +87,11 @@
     if([object respondsToSelector:@selector(workQueue)])
         return [object workQueue];
     return dispatch_get_global_queue(0, 0);
+}
+
+- (jmp_buf*)resumeAt
+{
+	return &_resumeAt;
 }
 
 @end
