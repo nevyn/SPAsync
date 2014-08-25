@@ -20,16 +20,16 @@
     __block BOOL secondCallbackTriggered = NO;
     
     [task addCallback:^(id value) {
-        STAssertEqualObjects(value, @(1337), @"Unexpected value");
-        STAssertEquals(firstCallbackTriggered, NO, @"Callback should only trigger once");
+        XCTAssertEqualObjects(value, @(1337), @"Unexpected value");
+        XCTAssertEqual(firstCallbackTriggered, NO, @"Callback should only trigger once");
         firstCallbackTriggered = YES;
     } on:callbackQueue];
     [task addErrorCallback:^(id value) {
-        STAssertTrue(NO, @"Error should not have triggered");
+        XCTAssertTrue(NO, @"Error should not have triggered");
     } on:callbackQueue];
     [task addCallback:^(id value) {
-        STAssertEqualObjects(value, @(1337), @"Unexpected value");
-        STAssertEquals(firstCallbackTriggered, YES, @"First callback should have triggered before the second");
+        XCTAssertEqualObjects(value, @(1337), @"Unexpected value");
+        XCTAssertEqual(firstCallbackTriggered, YES, @"First callback should have triggered before the second");
         secondCallbackTriggered = YES;
     } on:callbackQueue];
     
@@ -39,8 +39,8 @@
     while(!secondCallbackTriggered)
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
     
-    STAssertEquals(firstCallbackTriggered, YES, @"First callback should have triggered");
-    STAssertEquals(secondCallbackTriggered, YES, @"Second callback should have triggered");
+    XCTAssertEqual(firstCallbackTriggered, YES, @"First callback should have triggered");
+    XCTAssertEqual(secondCallbackTriggered, YES, @"Second callback should have triggered");
     
 }
 
@@ -53,16 +53,16 @@
     __block BOOL secondErrbackTriggered = NO;
     
     [task addErrorCallback:^(NSError *error) {
-        STAssertEquals(error.code, (NSInteger)1337, @"Unexpected error code");
-        STAssertEquals(firstErrbackTriggered, NO, @"Errback should only trigger once");
+        XCTAssertEqual(error.code, (NSInteger)1337, @"Unexpected error code");
+        XCTAssertEqual(firstErrbackTriggered, NO, @"Errback should only trigger once");
         firstErrbackTriggered = YES;
     } on:callbackQueue];
     [task addCallback:^(id value) {
-        STAssertTrue(NO, @"Callback should not have triggered");
+        XCTAssertTrue(NO, @"Callback should not have triggered");
     } on:callbackQueue];
     [task addErrorCallback:^(NSError *error) {
-        STAssertEquals(error.code, (NSInteger)1337, @"Unexpected error code");
-        STAssertEquals(firstErrbackTriggered, YES, @"First errback should have triggered before the second");
+        XCTAssertEqual(error.code, (NSInteger)1337, @"Unexpected error code");
+        XCTAssertEqual(firstErrbackTriggered, YES, @"First errback should have triggered before the second");
         secondErrbackTriggered = YES;
     } on:callbackQueue];
     
@@ -72,8 +72,8 @@
     while(!secondErrbackTriggered)
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
     
-    STAssertEquals(firstErrbackTriggered, YES, @"First errback should have triggered");
-    STAssertEquals(secondErrbackTriggered, YES, @"Second errback should have triggered");
+    XCTAssertEqual(firstErrbackTriggered, YES, @"First errback should have triggered");
+    XCTAssertEqual(secondErrbackTriggered, YES, @"Second errback should have triggered");
 }
 
 - (void)testLateCallback
@@ -85,15 +85,15 @@
     __block BOOL secondCallbackTriggered = NO;
     
     [task addCallback:^(id value) {
-        STAssertEqualObjects(value, @(1337), @"Unexpected value");
-        STAssertEquals(firstCallbackTriggered, NO, @"Callback should only trigger once");
+        XCTAssertEqualObjects(value, @(1337), @"Unexpected value");
+        XCTAssertEqual(firstCallbackTriggered, NO, @"Callback should only trigger once");
         firstCallbackTriggered = YES;
     } on:callbackQueue];
     
     [source completeWithValue:@(1337)];
 
     [task addCallback:^(id value) {
-        STAssertEqualObjects(value, @(1337), @"Unexpected value");
+        XCTAssertEqualObjects(value, @(1337), @"Unexpected value");
         secondCallbackTriggered = YES;
     } on:callbackQueue];
     
@@ -102,8 +102,8 @@
     while(!secondCallbackTriggered)
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
     
-    STAssertEquals(firstCallbackTriggered, YES, @"First callback should have triggered");
-    STAssertEquals(secondCallbackTriggered, YES, @"Second callback should have triggered");
+    XCTAssertEqual(firstCallbackTriggered, YES, @"First callback should have triggered");
+    XCTAssertEqual(secondCallbackTriggered, YES, @"Second callback should have triggered");
 }
 
 - (void)testLateErrback
@@ -115,15 +115,15 @@
     __block BOOL secondErrbackTriggered = NO;
     
     [task addErrorCallback:^(NSError *error) {
-        STAssertEquals(error.code, (NSInteger)1337, @"Unexpected value");
-        STAssertEquals(firstErrbackTriggered, NO, @"Callback should only trigger once");
+        XCTAssertEqual(error.code, (NSInteger)1337, @"Unexpected value");
+        XCTAssertEqual(firstErrbackTriggered, NO, @"Callback should only trigger once");
         firstErrbackTriggered = YES;
     } on:callbackQueue];
     
     [source failWithError:[NSError errorWithDomain:@"test" code:1337 userInfo:nil]];
 
     [task addErrorCallback:^(NSError *error) {
-        STAssertEquals(error.code, (NSInteger)1337, @"Unexpected value");
+        XCTAssertEqual(error.code, (NSInteger)1337, @"Unexpected value");
         secondErrbackTriggered = YES;
     } on:callbackQueue];
     
@@ -131,8 +131,8 @@
     while(!secondErrbackTriggered)
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
     
-    STAssertEquals(firstErrbackTriggered, YES, @"First callback should have triggered");
-    STAssertEquals(secondErrbackTriggered, YES, @"Second callback should have triggered");
+    XCTAssertEqual(firstErrbackTriggered, YES, @"First callback should have triggered");
+    XCTAssertEqual(secondErrbackTriggered, YES, @"Second callback should have triggered");
 }
 
 - (void)testThen
@@ -147,7 +147,7 @@
     } on:dispatch_get_main_queue()] then:^id(id value) {
         return @([value intValue]*30);
     } on:dispatch_get_main_queue()] addCallback:^(id value) {
-        STAssertEqualObjects(value, @(6000), @"Chain didn't chain as expected");
+        XCTAssertEqualObjects(value, @(6000), @"Chain didn't chain as expected");
         done = YES;
     } on:dispatch_get_main_queue()];
     
@@ -215,8 +215,8 @@
         __elapsed += pollInterval;
     }
     
-    STAssertEquals(callbackWasRun, NO, @"Callback should not have been run");
-    STAssertEquals(source.task.cancelled, YES, @"Task should be cancelled");
+    XCTAssertEqual(callbackWasRun, NO, @"Callback should not have been run");
+    XCTAssertEqual(source.task.cancelled, YES, @"Task should be cancelled");
 }
 
 - (void)testCallbackCancellation
@@ -247,9 +247,9 @@
         __elapsed += pollInterval;
     }
     
-    STAssertEquals(callbackWasRun, NO, @"Callback should not have been run");
-    STAssertEquals(cancelled, YES, @"Cancellation callback wasn't run");
-    STAssertEquals(source.task.cancelled, YES, @"Task should be cancelled");
+    XCTAssertEqual(callbackWasRun, NO, @"Callback should not have been run");
+    XCTAssertEqual(cancelled, YES, @"Cancellation callback wasn't run");
+    XCTAssertEqual(source.task.cancelled, YES, @"Task should be cancelled");
 }
 
 - (void)testCancellationChain
@@ -272,9 +272,9 @@
         __elapsed += pollInterval;
     }
 
-    STAssertEquals(source.task.cancelled, YES, @"Source task should be cancelled");
-    STAssertEquals(chained.cancelled, YES, @"Chained task should be cancelled");
-    STAssertEquals(callbackWasRun, NO, @"Chained callback shouldn't have been called");
+    XCTAssertEqual(source.task.cancelled, YES, @"Source task should be cancelled");
+    XCTAssertEqual(chained.cancelled, YES, @"Chained task should be cancelled");
+    XCTAssertEqual(callbackWasRun, NO, @"Chained callback shouldn't have been called");
 }
 
 - (void)testCancellationChainCompleted
@@ -298,9 +298,9 @@
 
     SPAssertTaskCancelledWithTimeout(delayed, 0.2);
     
-    STAssertTrue(source.task.cancelled, @"Source task should be cancelled");
-    STAssertTrue(chained.cancelled, @"Chain task should be cancelled");
-    STAssertTrue(delayed.cancelled, @"Chained task should be cancelled");
+    XCTAssertTrue(source.task.cancelled, @"Source task should be cancelled");
+    XCTAssertTrue(chained.cancelled, @"Chain task should be cancelled");
+    XCTAssertTrue(delayed.cancelled, @"Chained task should be cancelled");
 }
 
 
@@ -312,30 +312,30 @@
     __block int i = 0;
     
     [[[successSource.task addCallback:^(id value) {
-        STAssertEqualObjects(value, @1, @"Task didn't complete with the correct value");
+        XCTAssertEqualObjects(value, @1, @"Task didn't complete with the correct value");
     } on:dispatch_get_main_queue()] addErrorCallback:^(NSError *error) {
-        STAssertNil(error, @"Task shouldn't have an error");
+        XCTAssertNil(error, @"Task shouldn't have an error");
     } on:dispatch_get_main_queue()] addFinally:^(BOOL cancelled) {
-        STAssertEquals(cancelled, NO, @"Task should not be cancelled");
+        XCTAssertEqual(cancelled, NO, @"Task should not be cancelled");
         i++;
     } on:dispatch_get_main_queue()];
     
     NSError *expected = [NSError errorWithDomain:@"test" code:0 userInfo:nil];
     [[[failureSource.task addCallback:^(id value) {
-        STAssertEqualObjects(value, nil, @"Task failed and shouldn't have a value");
+        XCTAssertEqualObjects(value, nil, @"Task failed and shouldn't have a value");
     } on:dispatch_get_main_queue()] addErrorCallback:^(NSError *error) {
-        STAssertEquals(error, expected, @"Task should have an error");
+        XCTAssertEqual(error, expected, @"Task should have an error");
     } on:dispatch_get_main_queue()] addFinally:^(BOOL cancelled) {
-        STAssertEquals(cancelled, NO, @"Task should not be cancelled");
+        XCTAssertEqual(cancelled, NO, @"Task should not be cancelled");
         i++;
     } on:dispatch_get_main_queue()];
     
     [[[cancellationSource.task addCallback:^(id value) {
-        STAssertEqualObjects(value, nil, @"Task was cancelled and shouldn't have a value");
+        XCTAssertEqualObjects(value, nil, @"Task was cancelled and shouldn't have a value");
     } on:dispatch_get_main_queue()] addErrorCallback:^(NSError *error) {
-        STAssertNil(error, @"Task was cancelled shouldn't have an error");
+        XCTAssertNil(error, @"Task was cancelled shouldn't have an error");
     } on:dispatch_get_main_queue()] addFinally:^(BOOL cancelled) {
-        STAssertEquals(cancelled, YES, @"Task should be cancelled");
+        XCTAssertEqual(cancelled, YES, @"Task should be cancelled");
         i++;
     } on:dispatch_get_main_queue()];
     
@@ -344,7 +344,7 @@
     [cancellationSource.task cancel];
     
     SPTestSpinRunloopWithCondition(i == 3, 0.1);
-    STAssertEquals(i, 3, @"A finalizer wasn't called");
+    XCTAssertEqual(i, 3, @"A finalizer wasn't called");
 }
 
 - (void)testAwaitAll_FailThenComplete

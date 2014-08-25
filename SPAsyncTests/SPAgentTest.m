@@ -24,13 +24,13 @@
     SPTask *leetTask = [[agent sp_agentAsync] leet];
     __block BOOL gotLeet = NO;
     [leetTask addCallback:^(id value) {
-        STAssertEqualObjects(value, @(1337), @"Got an unexpected value");
+        XCTAssertEqualObjects(value, @(1337), @"Got an unexpected value");
         gotLeet = YES;
     } on:dispatch_get_main_queue()];
     
     // Spin the runloop
     SPTestSpinRunloopWithCondition(gotLeet, 1.0);
-    STAssertEquals(gotLeet, YES, @"Expected to have gotten leet by now");
+    XCTAssertEqual(gotLeet, YES, @"Expected to have gotten leet by now");
 }
 
 @end

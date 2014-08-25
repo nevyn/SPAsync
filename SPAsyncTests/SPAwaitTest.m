@@ -45,7 +45,7 @@
     else
         return @3;
     
-    STFail(@"Shouldn't reach past return");
+    XCTFail(@"Shouldn't reach past return");
     
     SPAsyncMethodEnd
 }

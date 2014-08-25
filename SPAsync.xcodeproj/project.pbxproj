@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0519EFE01816CCC100CFDCA4 /* SPAsyncNamespacing.h in Headers */ = {isa = PBXBuildFile; fileRef = 0519EFDF1816CCC100CFDCA4 /* SPAsyncNamespacing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05B647DE16B85AF90050002D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B647DD16B85AF90050002D /* Foundation.framework */; };
-		05B647ED16B85AF90050002D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B647EC16B85AF90050002D /* SenTestingKit.framework */; };
 		05B647EF16B85AF90050002D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B647EE16B85AF90050002D /* UIKit.framework */; };
 		05B647F016B85AF90050002D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B647DD16B85AF90050002D /* Foundation.framework */; };
 		05B647F316B85AF90050002D /* libSPAsync.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B647DA16B85AF90050002D /* libSPAsync.a */; };
@@ -31,6 +30,7 @@
 		05BBF3E316EF301C0011E948 /* SPAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B6481116B85BC20050002D /* SPAgent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05BBF3E416EF301C0011E948 /* SPTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B6481316B85BC20050002D /* SPTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05BBF3E516EF301C0011E948 /* SPAwait.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B6483F16B93F200050002D /* SPAwait.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05D3380F19AB5F6200A286D4 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05D3380A19AB5E4900A286D4 /* XCTest.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,7 +65,7 @@
 		05B647DA16B85AF90050002D /* libSPAsync.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSPAsync.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B647DD16B85AF90050002D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		05B647E116B85AF90050002D /* SPAsync-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SPAsync-Prefix.pch"; path = "Support/SPAsync-Prefix.pch"; sourceTree = "<group>"; };
-		05B647EB16B85AF90050002D /* SPAsyncTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SPAsyncTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		05B647EB16B85AF90050002D /* SPAsyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SPAsyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B647EC16B85AF90050002D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		05B647EE16B85AF90050002D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		05B647F616B85AF90050002D /* SPAsyncTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SPAsyncTests-Info.plist"; sourceTree = "<group>"; };
@@ -91,6 +91,7 @@
 		05BBF3B516EF2EA30011E948 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		05BBF3B616EF2EA30011E948 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		05BBF3DB16EF2F780011E948 /* SPAsync-Framework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "SPAsync-Framework-Info.plist"; path = "Support/SPAsync-Framework-Info.plist"; sourceTree = SOURCE_ROOT; };
+		05D3380A19AB5E4900A286D4 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05B647ED16B85AF90050002D /* SenTestingKit.framework in Frameworks */,
+				05D3380F19AB5F6200A286D4 /* XCTest.framework in Frameworks */,
 				05B647EF16B85AF90050002D /* UIKit.framework in Frameworks */,
 				05B647F016B85AF90050002D /* Foundation.framework in Frameworks */,
 				05B647F316B85AF90050002D /* libSPAsync.a in Frameworks */,
@@ -165,7 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				05B647DA16B85AF90050002D /* libSPAsync.a */,
-				05B647EB16B85AF90050002D /* SPAsyncTests.octest */,
+				05B647EB16B85AF90050002D /* SPAsyncTests.xctest */,
 				05BBF3B016EF2EA30011E948 /* SPAsync.framework */,
 			);
 			name = Products;
@@ -174,6 +175,7 @@
 		05B647DC16B85AF90050002D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				05D3380A19AB5E4900A286D4 /* XCTest.framework */,
 				05B647DD16B85AF90050002D /* Foundation.framework */,
 				05B647EC16B85AF90050002D /* SenTestingKit.framework */,
 				05B647EE16B85AF90050002D /* UIKit.framework */,
@@ -305,7 +307,6 @@
 				05B647E616B85AF90050002D /* Sources */,
 				05B647E716B85AF90050002D /* Frameworks */,
 				05B647E816B85AF90050002D /* Resources */,
-				05B647E916B85AF90050002D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -314,7 +315,7 @@
 			);
 			name = SPAsyncTests;
 			productName = SPAsyncTests;
-			productReference = 05B647EB16B85AF90050002D /* SPAsyncTests.octest */;
+			productReference = 05B647EB16B85AF90050002D /* SPAsyncTests.xctest */;
 			productType = "com.apple.product-type.bundle";
 		};
 		05BBF3AF16EF2EA30011E948 /* SPAsync Framework */ = {
@@ -341,6 +342,7 @@
 		05B647D116B85AF90050002D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = Spotify;
 			};
@@ -381,28 +383,13 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		05B647E916B85AF90050002D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		05B647D616B85AF90050002D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				05B6481916B85BC20050002D /* NSObject+SPInvocationGrabbing.m in Sources */,
+				05D5716D19AB3A3B0082C554 /* SPKVOTask.m in Sources */,
 				05B6481A16B85BC20050002D /* SPAgent.m in Sources */,
 				05B6481C16B85BC20050002D /* SPTask.m in Sources */,
 				05B6484116B93F2A0050002D /* SPAwait.m in Sources */,
@@ -536,8 +523,9 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support/SPAsync-Prefix.pch";
@@ -545,7 +533,7 @@
 				INFOPLIST_FILE = "SPAsyncTests/SPAsyncTests-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
 		};
@@ -554,8 +542,9 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support/SPAsync-Prefix.pch";
@@ -563,7 +552,7 @@
 				INFOPLIST_FILE = "SPAsyncTests/SPAsyncTests-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};

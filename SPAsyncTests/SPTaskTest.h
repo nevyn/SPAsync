@@ -6,9 +6,9 @@
 //
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface SPTaskTest : SenTestCase
+@interface SPTaskTest : XCTestCase
 
 @end
 
@@ -19,48 +19,48 @@
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:pollInterval]]; \
         __elapsed += pollInterval; \
     } \
-    STAssertTrue(__elapsed < timeout, @"Timeout reached without completion"); \
+    XCTAssertTrue(__elapsed < timeout, @"Timeout reached without completion"); \
 })
 
 
 #define SPAssertTaskCompletesWithValueAndTimeout(task, expected, timeout) ({ \
     __block BOOL __triggered = NO; \
     [task addCallback:^(id value) {\
-        STAssertEqualObjects(expected, value, @"Wrong value completed"); \
+        XCTAssertEqualObjects(expected, value, @"Wrong value completed"); \
         __triggered = YES; \
     } on:dispatch_get_main_queue()]; \
     [task addErrorCallback:^(NSError *error) {\
-        STFail(@"Didn't expect task to fail"); \
+        XCTFail(@"Didn't expect task to fail"); \
         __triggered = YES; \
     } on:dispatch_get_main_queue()]; \
     SPTestSpinRunloopWithCondition(__triggered, timeout); \
-    STAssertTrue(__triggered, @"Timeout reached without completion"); \
+    XCTAssertTrue(__triggered, @"Timeout reached without completion"); \
 })
 
 #define SPAssertTaskFailsWithErrorAndTimeout(task, expected, timeout) ({ \
     __block BOOL __triggered = NO; \
     [task addCallback:^(id value) {\
-        STFail(@"Task should have failed"); \
+        XCTFail(@"Task should have failed"); \
         __triggered = YES; \
     } on:dispatch_get_main_queue()]; \
     [task addErrorCallback:^(NSError *error) {\
-        STAssertEqualObjects(error, expected, @"Not the expected error"); \
+        XCTAssertEqualObjects(error, expected, @"Not the expected error"); \
         __triggered = YES; \
     } on:dispatch_get_main_queue()]; \
     SPTestSpinRunloopWithCondition(__triggered, timeout); \
-    STAssertTrue(__triggered, @"Timeout reached without completion"); \
+    XCTAssertTrue(__triggered, @"Timeout reached without completion"); \
 })
 
 #define SPAssertTaskCancelledWithTimeout(task, timeout) ({ \
     __block BOOL __triggered = NO; \
     [task addCallback:^(id value) {\
-        STFail(@"Didn't expect task to complete"); \
+        XCTFail(@"Didn't expect task to complete"); \
         __triggered = YES; \
     } on:dispatch_get_main_queue()]; \
     [task addErrorCallback:^(NSError *error) {\
-        STFail(@"Didn't expect task to fail"); \
+        XCTFail(@"Didn't expect task to fail"); \
         __triggered = YES; \
     } on:dispatch_get_main_queue()]; \
     SPTestSpinRunloopWithCondition(!__triggered, timeout); \
-    STAssertFalse(__triggered, @"Timeout reached with completion"); \
+    XCTAssertFalse(__triggered, @"Timeout reached with completion"); \
 })
