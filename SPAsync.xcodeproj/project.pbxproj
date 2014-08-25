@@ -30,7 +30,9 @@
 		05BBF3E316EF301C0011E948 /* SPAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B6481116B85BC20050002D /* SPAgent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05BBF3E416EF301C0011E948 /* SPTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B6481316B85BC20050002D /* SPTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05BBF3E516EF301C0011E948 /* SPAwait.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B6483F16B93F200050002D /* SPAwait.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05D3380919AB5B8D00A286D4 /* SPKVOTaskTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D3380819AB5B8D00A286D4 /* SPKVOTaskTest.m */; };
 		05D3380F19AB5F6200A286D4 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05D3380A19AB5E4900A286D4 /* XCTest.framework */; };
+		05D5716D19AB3A3B0082C554 /* SPKVOTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D5716C19AB3A3B0082C554 /* SPKVOTask.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,7 +93,10 @@
 		05BBF3B516EF2EA30011E948 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		05BBF3B616EF2EA30011E948 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		05BBF3DB16EF2F780011E948 /* SPAsync-Framework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "SPAsync-Framework-Info.plist"; path = "Support/SPAsync-Framework-Info.plist"; sourceTree = SOURCE_ROOT; };
+		05D3380819AB5B8D00A286D4 /* SPKVOTaskTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPKVOTaskTest.m; sourceTree = "<group>"; };
 		05D3380A19AB5E4900A286D4 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		05D5716919AB3A2A0082C554 /* SPKVOTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPKVOTask.h; sourceTree = "<group>"; };
+		05D5716C19AB3A3B0082C554 /* SPKVOTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPKVOTask.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,6 +219,7 @@
 				05B6480C16B85BB60050002D /* SPTaskTest.m */,
 				05B6484216B94C010050002D /* SPAwaitTest.h */,
 				05B6484316B94C010050002D /* SPAwaitTest.m */,
+				05D3380819AB5B8D00A286D4 /* SPKVOTaskTest.m */,
 				05B647F516B85AF90050002D /* Supporting Files */,
 			);
 			path = SPAsyncTests;
@@ -237,6 +243,7 @@
 				05B6481316B85BC20050002D /* SPTask.h */,
 				05B6483F16B93F200050002D /* SPAwait.h */,
 				0519EFDF1816CCC100CFDCA4 /* SPAsyncNamespacing.h */,
+				05D5716919AB3A2A0082C554 /* SPKVOTask.h */,
 				05B16D1F182D9CAC00025797 /* UIKit */,
 			);
 			name = Interfaces;
@@ -250,6 +257,7 @@
 				05B6481616B85BC20050002D /* SPAgent.m */,
 				05B6481816B85BC20050002D /* SPTask.m */,
 				05B6484016B93F2A0050002D /* SPAwait.m */,
+				05D5716C19AB3A3B0082C554 /* SPKVOTask.m */,
 			);
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
@@ -400,6 +408,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05D3380919AB5B8D00A286D4 /* SPKVOTaskTest.m in Sources */,
 				05B6480D16B85BB60050002D /* SPAgentTest.m in Sources */,
 				05B6480E16B85BB60050002D /* SPTaskTest.m in Sources */,
 				05B6484416B94C010050002D /* SPAwaitTest.m in Sources */,
