@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0519E16419C8D0AB00DF8974 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0519E16319C8D0AB00DF8974 /* XCTest.framework */; };
 		0519EFE01816CCC100CFDCA4 /* SPAsyncNamespacing.h in Headers */ = {isa = PBXBuildFile; fileRef = 0519EFDF1816CCC100CFDCA4 /* SPAsyncNamespacing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054B255719B3300B00F61F64 /* libSPAsync.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B647DA16B85AF90050002D /* libSPAsync.a */; };
 		054B258819B3350A00F61F64 /* SPAgentTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6480A16B85BB60050002D /* SPAgentTest.m */; };
@@ -58,6 +59,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0519E16319C8D0AB00DF8974 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		0519EFDF1816CCC100CFDCA4 /* SPAsyncNamespacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPAsyncNamespacing.h; sourceTree = "<group>"; };
 		054B257419B3346800F61F64 /* libSPAsync.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSPAsync.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		054B257E19B3346800F61F64 /* SPAsyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SPAsyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,6 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0519E16419C8D0AB00DF8974 /* XCTest.framework in Frameworks */,
 				05C3925219C8CFFB003B862A /* SPAsync.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -205,6 +208,7 @@
 		05B647DC16B85AF90050002D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0519E16319C8D0AB00DF8974 /* XCTest.framework */,
 				05B647DD16B85AF90050002D /* Foundation.framework */,
 				05B647EC16B85AF90050002D /* SenTestingKit.framework */,
 				05B647EE16B85AF90050002D /* UIKit.framework */,
@@ -553,7 +557,6 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_MODULE_NAME = SPAsync;
@@ -582,7 +585,6 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_MODULE_NAME = SPAsync;
 				PRODUCT_NAME = SPAsync;
@@ -618,7 +620,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "SPAsync (Mac)Tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -652,7 +653,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = "SPAsync (Mac)Tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -743,6 +743,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -767,6 +768,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -820,7 +822,6 @@
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				INFOPLIST_FILE = "Support/SPAsync-Framework-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = SPAsync;
 				SDKROOT = macosx;
@@ -845,7 +846,6 @@
 				GCC_PREFIX_HEADER = "Support/SPAsync-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				INFOPLIST_FILE = "Support/SPAsync-Framework-Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = SPAsync;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = framework;
