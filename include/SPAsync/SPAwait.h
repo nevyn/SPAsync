@@ -76,6 +76,7 @@
     [__weakAwaitCoroutine resumeAt:0]; \
     return [__weakAwaitCoroutine task];
 
+#import <Foundation/Foundation.h>
 
 @class SPTask;
 typedef id(^SPAwaitCoroutineBody)(int resumeAt);

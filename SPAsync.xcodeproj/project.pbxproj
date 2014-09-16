@@ -8,18 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		0519EFE01816CCC100CFDCA4 /* SPAsyncNamespacing.h in Headers */ = {isa = PBXBuildFile; fileRef = 0519EFDF1816CCC100CFDCA4 /* SPAsyncNamespacing.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		054B255719B3300B00F61F64 /* libSPAsync.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B647DA16B85AF90050002D /* libSPAsync.a */; };
+		054B258819B3350A00F61F64 /* SPAgentTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6480A16B85BB60050002D /* SPAgentTest.m */; };
+		054B258919B3350A00F61F64 /* SPTaskTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6480C16B85BB60050002D /* SPTaskTest.m */; };
+		054B258A19B3350A00F61F64 /* SPAwaitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6484316B94C010050002D /* SPAwaitTest.m */; };
+		054B258B19B3356300F61F64 /* NSObject+SPInvocationGrabbing.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481516B85BC20050002D /* NSObject+SPInvocationGrabbing.m */; };
+		054B258C19B3356300F61F64 /* SPAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481616B85BC20050002D /* SPAgent.m */; };
+		054B258D19B3356300F61F64 /* SPTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481816B85BC20050002D /* SPTask.m */; };
+		054B258E19B3356300F61F64 /* SPAwait.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6484016B93F2A0050002D /* SPAwait.m */; };
+		058DBD1C199D43E8008F7741 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058DBD1B199D43E8008F7741 /* main.swift */; };
+		058DBD21199D4424008F7741 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 058DBD20199D4424008F7741 /* Task.swift */; };
 		05B647DE16B85AF90050002D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B647DD16B85AF90050002D /* Foundation.framework */; };
-		05B647EF16B85AF90050002D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B647EE16B85AF90050002D /* UIKit.framework */; };
-		05B647F016B85AF90050002D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B647DD16B85AF90050002D /* Foundation.framework */; };
-		05B647F316B85AF90050002D /* libSPAsync.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 05B647DA16B85AF90050002D /* libSPAsync.a */; };
-		05B647F916B85AF90050002D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 05B647F716B85AF90050002D /* InfoPlist.strings */; };
-		05B6480D16B85BB60050002D /* SPAgentTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6480A16B85BB60050002D /* SPAgentTest.m */; };
-		05B6480E16B85BB60050002D /* SPTaskTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6480C16B85BB60050002D /* SPTaskTest.m */; };
 		05B6481916B85BC20050002D /* NSObject+SPInvocationGrabbing.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481516B85BC20050002D /* NSObject+SPInvocationGrabbing.m */; };
 		05B6481A16B85BC20050002D /* SPAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481616B85BC20050002D /* SPAgent.m */; };
 		05B6481C16B85BC20050002D /* SPTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481816B85BC20050002D /* SPTask.m */; };
 		05B6484116B93F2A0050002D /* SPAwait.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6484016B93F2A0050002D /* SPAwait.m */; };
-		05B6484416B94C010050002D /* SPAwaitTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6484316B94C010050002D /* SPAwaitTest.m */; };
 		05BBF3B216EF2EA30011E948 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05BBF3B116EF2EA30011E948 /* Cocoa.framework */; };
 		05BBF3DD16EF30100011E948 /* NSObject+SPInvocationGrabbing.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481516B85BC20050002D /* NSObject+SPInvocationGrabbing.m */; };
 		05BBF3DE16EF30100011E948 /* SPAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 05B6481616B85BC20050002D /* SPAgent.m */; };
@@ -30,22 +33,19 @@
 		05BBF3E316EF301C0011E948 /* SPAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B6481116B85BC20050002D /* SPAgent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05BBF3E416EF301C0011E948 /* SPTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B6481316B85BC20050002D /* SPTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		05BBF3E516EF301C0011E948 /* SPAwait.h in Headers */ = {isa = PBXBuildFile; fileRef = 05B6483F16B93F200050002D /* SPAwait.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		05D3380919AB5B8D00A286D4 /* SPKVOTaskTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D3380819AB5B8D00A286D4 /* SPKVOTaskTest.m */; };
-		05D3380F19AB5F6200A286D4 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05D3380A19AB5E4900A286D4 /* XCTest.framework */; };
-		05D5716D19AB3A3B0082C554 /* SPKVOTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 05D5716C19AB3A3B0082C554 /* SPKVOTask.m */; };
+		05C3925219C8CFFB003B862A /* SPAsync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05BBF3B016EF2EA30011E948 /* SPAsync.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		05B647F116B85AF90050002D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 05B647D116B85AF90050002D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 05B647D916B85AF90050002D;
-			remoteInfo = SPAsync;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
+		058DBD17199D43E8008F7741 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		05B647D816B85AF90050002D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -59,15 +59,20 @@
 
 /* Begin PBXFileReference section */
 		0519EFDF1816CCC100CFDCA4 /* SPAsyncNamespacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPAsyncNamespacing.h; sourceTree = "<group>"; };
+		054B257419B3346800F61F64 /* libSPAsync.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSPAsync.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		054B257E19B3346800F61F64 /* SPAsyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SPAsyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		057E7ECB182E8302009D0318 /* UIScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIScrollView.h; sourceTree = "<group>"; };
 		057E7ECC182E830C009D0318 /* UIScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIScrollView.m; sourceTree = "<group>"; };
 		057E7ED3182E8DE8009D0318 /* UIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIKit.h; sourceTree = "<group>"; };
+		058DBD19199D43E8008F7741 /* SwiftDemo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwiftDemo; sourceTree = BUILT_PRODUCTS_DIR; };
+		058DBD1B199D43E8008F7741 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		058DBD20199D4424008F7741 /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		058DBD22199D443F008F7741 /* Swift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Swift-Bridging-Header.h"; sourceTree = "<group>"; };
 		05B16D20182D9CAC00025797 /* UIView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIView.h; sourceTree = "<group>"; };
 		05B16D23182D9D9500025797 /* UIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIView.m; sourceTree = "<group>"; };
 		05B647DA16B85AF90050002D /* libSPAsync.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSPAsync.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B647DD16B85AF90050002D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		05B647E116B85AF90050002D /* SPAsync-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SPAsync-Prefix.pch"; path = "Support/SPAsync-Prefix.pch"; sourceTree = "<group>"; };
-		05B647EB16B85AF90050002D /* SPAsyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SPAsyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B647EC16B85AF90050002D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		05B647EE16B85AF90050002D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		05B647F616B85AF90050002D /* SPAsyncTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SPAsyncTests-Info.plist"; sourceTree = "<group>"; };
@@ -93,29 +98,37 @@
 		05BBF3B516EF2EA30011E948 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		05BBF3B616EF2EA30011E948 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		05BBF3DB16EF2F780011E948 /* SPAsync-Framework-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "SPAsync-Framework-Info.plist"; path = "Support/SPAsync-Framework-Info.plist"; sourceTree = SOURCE_ROOT; };
-		05D3380819AB5B8D00A286D4 /* SPKVOTaskTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPKVOTaskTest.m; sourceTree = "<group>"; };
-		05D3380A19AB5E4900A286D4 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		05D5716919AB3A2A0082C554 /* SPKVOTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPKVOTask.h; sourceTree = "<group>"; };
-		05D5716C19AB3A3B0082C554 /* SPKVOTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPKVOTask.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		054B257119B3346800F61F64 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		054B257B19B3346800F61F64 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05C3925219C8CFFB003B862A /* SPAsync.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		058DBD16199D43E8008F7741 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				054B255719B3300B00F61F64 /* libSPAsync.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		05B647D716B85AF90050002D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				05B647DE16B85AF90050002D /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		05B647E716B85AF90050002D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				05D3380F19AB5F6200A286D4 /* XCTest.framework in Frameworks */,
-				05B647EF16B85AF90050002D /* UIKit.framework in Frameworks */,
-				05B647F016B85AF90050002D /* Foundation.framework in Frameworks */,
-				05B647F316B85AF90050002D /* libSPAsync.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +143,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		058DBD1A199D43E8008F7741 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				058DBD1B199D43E8008F7741 /* main.swift */,
+				058DBD20199D4424008F7741 /* Task.swift */,
+				058DBD22199D443F008F7741 /* Swift-Bridging-Header.h */,
+			);
+			path = Swift;
+			sourceTree = SOURCE_ROOT;
+		};
 		05B16D1F182D9CAC00025797 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -171,8 +194,10 @@
 			isa = PBXGroup;
 			children = (
 				05B647DA16B85AF90050002D /* libSPAsync.a */,
-				05B647EB16B85AF90050002D /* SPAsyncTests.xctest */,
 				05BBF3B016EF2EA30011E948 /* SPAsync.framework */,
+				058DBD19199D43E8008F7741 /* SwiftDemo */,
+				054B257419B3346800F61F64 /* libSPAsync.a */,
+				054B257E19B3346800F61F64 /* SPAsyncTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -180,7 +205,6 @@
 		05B647DC16B85AF90050002D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				05D3380A19AB5E4900A286D4 /* XCTest.framework */,
 				05B647DD16B85AF90050002D /* Foundation.framework */,
 				05B647EC16B85AF90050002D /* SenTestingKit.framework */,
 				05B647EE16B85AF90050002D /* UIKit.framework */,
@@ -196,6 +220,7 @@
 				05B6480F16B85BC20050002D /* Interfaces */,
 				05B6481416B85BC20050002D /* Sources */,
 				05B16D21182D9D8A00025797 /* Extensions */,
+				058DBD1A199D43E8008F7741 /* Swift */,
 				05B647E016B85AF90050002D /* Supporting Files */,
 			);
 			path = SPAsync;
@@ -219,7 +244,6 @@
 				05B6480C16B85BB60050002D /* SPTaskTest.m */,
 				05B6484216B94C010050002D /* SPAwaitTest.h */,
 				05B6484316B94C010050002D /* SPAwaitTest.m */,
-				05D3380819AB5B8D00A286D4 /* SPKVOTaskTest.m */,
 				05B647F516B85AF90050002D /* Supporting Files */,
 			);
 			path = SPAsyncTests;
@@ -243,7 +267,6 @@
 				05B6481316B85BC20050002D /* SPTask.h */,
 				05B6483F16B93F200050002D /* SPAwait.h */,
 				0519EFDF1816CCC100CFDCA4 /* SPAsyncNamespacing.h */,
-				05D5716919AB3A2A0082C554 /* SPKVOTask.h */,
 				05B16D1F182D9CAC00025797 /* UIKit */,
 			);
 			name = Interfaces;
@@ -257,7 +280,6 @@
 				05B6481616B85BC20050002D /* SPAgent.m */,
 				05B6481816B85BC20050002D /* SPTask.m */,
 				05B6484016B93F2A0050002D /* SPAwait.m */,
-				05D5716C19AB3A3B0082C554 /* SPKVOTask.m */,
 			);
 			path = Sources;
 			sourceTree = SOURCE_ROOT;
@@ -275,6 +297,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		054B257219B3346800F61F64 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		05BBF3AD16EF2EA30011E948 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -291,9 +320,60 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		05B647D916B85AF90050002D /* SPAsync */ = {
+		054B257319B3346800F61F64 /* SPAsync (Mac) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 05B647FF16B85AF90050002D /* Build configuration list for PBXNativeTarget "SPAsync" */;
+			buildConfigurationList = 054B258219B3346900F61F64 /* Build configuration list for PBXNativeTarget "SPAsync (Mac)" */;
+			buildPhases = (
+				054B257019B3346800F61F64 /* Sources */,
+				054B257119B3346800F61F64 /* Frameworks */,
+				054B257219B3346800F61F64 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SPAsync (Mac)";
+			productName = "SPAsync (Mac)";
+			productReference = 054B257419B3346800F61F64 /* libSPAsync.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		054B257D19B3346800F61F64 /* SPAsyncTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 054B258519B3346900F61F64 /* Build configuration list for PBXNativeTarget "SPAsyncTests" */;
+			buildPhases = (
+				054B257A19B3346800F61F64 /* Sources */,
+				054B257B19B3346800F61F64 /* Frameworks */,
+				054B257C19B3346800F61F64 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SPAsyncTests;
+			productName = "SPAsync (Mac)Tests";
+			productReference = 054B257E19B3346800F61F64 /* SPAsyncTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		058DBD18199D43E8008F7741 /* SwiftDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 058DBD1D199D43E8008F7741 /* Build configuration list for PBXNativeTarget "SwiftDemo" */;
+			buildPhases = (
+				058DBD15199D43E8008F7741 /* Sources */,
+				058DBD16199D43E8008F7741 /* Frameworks */,
+				058DBD17199D43E8008F7741 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftDemo;
+			productName = Swift;
+			productReference = 058DBD19199D43E8008F7741 /* SwiftDemo */;
+			productType = "com.apple.product-type.tool";
+		};
+		05B647D916B85AF90050002D /* SPAsync (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 05B647FF16B85AF90050002D /* Build configuration list for PBXNativeTarget "SPAsync (iOS)" */;
 			buildPhases = (
 				05B647D616B85AF90050002D /* Sources */,
 				05B647D716B85AF90050002D /* Frameworks */,
@@ -303,28 +383,10 @@
 			);
 			dependencies = (
 			);
-			name = SPAsync;
+			name = "SPAsync (iOS)";
 			productName = SPAsync;
 			productReference = 05B647DA16B85AF90050002D /* libSPAsync.a */;
 			productType = "com.apple.product-type.library.static";
-		};
-		05B647EA16B85AF90050002D /* SPAsyncTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 05B6480216B85AF90050002D /* Build configuration list for PBXNativeTarget "SPAsyncTests" */;
-			buildPhases = (
-				05B647E616B85AF90050002D /* Sources */,
-				05B647E716B85AF90050002D /* Frameworks */,
-				05B647E816B85AF90050002D /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				05B647F216B85AF90050002D /* PBXTargetDependency */,
-			);
-			name = SPAsyncTests;
-			productName = SPAsyncTests;
-			productReference = 05B647EB16B85AF90050002D /* SPAsyncTests.xctest */;
-			productType = "com.apple.product-type.bundle";
 		};
 		05BBF3AF16EF2EA30011E948 /* SPAsync Framework */ = {
 			isa = PBXNativeTarget;
@@ -350,9 +412,19 @@
 		05B647D116B85AF90050002D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0500;
-				ORGANIZATIONNAME = Spotify;
+				ORGANIZATIONNAME = ThirdCog;
+				TargetAttributes = {
+					054B257319B3346800F61F64 = {
+						CreatedOnToolsVersion = 6.0;
+					};
+					054B257D19B3346800F61F64 = {
+						CreatedOnToolsVersion = 6.0;
+					};
+					058DBD18199D43E8008F7741 = {
+						CreatedOnToolsVersion = 6.0;
+					};
+				};
 			};
 			buildConfigurationList = 05B647D416B85AF90050002D /* Build configuration list for PBXProject "SPAsync" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -366,19 +438,20 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				05B647D916B85AF90050002D /* SPAsync */,
-				05B647EA16B85AF90050002D /* SPAsyncTests */,
+				05B647D916B85AF90050002D /* SPAsync (iOS) */,
 				05BBF3AF16EF2EA30011E948 /* SPAsync Framework */,
+				058DBD18199D43E8008F7741 /* SwiftDemo */,
+				054B257319B3346800F61F64 /* SPAsync (Mac) */,
+				054B257D19B3346800F61F64 /* SPAsyncTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		05B647E816B85AF90050002D /* Resources */ = {
+		054B257C19B3346800F61F64 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				05B647F916B85AF90050002D /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,26 +465,44 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		054B257019B3346800F61F64 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				054B258B19B3356300F61F64 /* NSObject+SPInvocationGrabbing.m in Sources */,
+				054B258C19B3356300F61F64 /* SPAgent.m in Sources */,
+				054B258D19B3356300F61F64 /* SPTask.m in Sources */,
+				054B258E19B3356300F61F64 /* SPAwait.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		054B257A19B3346800F61F64 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				054B258819B3350A00F61F64 /* SPAgentTest.m in Sources */,
+				054B258919B3350A00F61F64 /* SPTaskTest.m in Sources */,
+				054B258A19B3350A00F61F64 /* SPAwaitTest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		058DBD15199D43E8008F7741 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				058DBD21199D4424008F7741 /* Task.swift in Sources */,
+				058DBD1C199D43E8008F7741 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		05B647D616B85AF90050002D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				05B6481916B85BC20050002D /* NSObject+SPInvocationGrabbing.m in Sources */,
-				05D5716D19AB3A3B0082C554 /* SPKVOTask.m in Sources */,
 				05B6481A16B85BC20050002D /* SPAgent.m in Sources */,
 				05B6481C16B85BC20050002D /* SPTask.m in Sources */,
 				05B6484116B93F2A0050002D /* SPAwait.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		05B647E616B85AF90050002D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				05D3380919AB5B8D00A286D4 /* SPKVOTaskTest.m in Sources */,
-				05B6480D16B85BB60050002D /* SPAgentTest.m in Sources */,
-				05B6480E16B85BB60050002D /* SPTaskTest.m in Sources */,
-				05B6484416B94C010050002D /* SPAwaitTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -428,14 +519,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		05B647F216B85AF90050002D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 05B647D916B85AF90050002D /* SPAsync */;
-			targetProxy = 05B647F116B85AF90050002D /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
 		05B647F716B85AF90050002D /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
@@ -448,6 +531,194 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		054B258319B3346900F61F64 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_MODULE_NAME = SPAsync;
+				PRODUCT_NAME = SPAsync;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		054B258419B3346900F61F64 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_MODULE_NAME = SPAsync;
+				PRODUCT_NAME = SPAsync;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		054B258619B3346900F61F64 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "SPAsync (Mac)Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		054B258719B3346900F61F64 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "SPAsync (Mac)Tests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		058DBD1E199D43E8008F7741 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "Swift/Swift-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		058DBD1F199D43E8008F7741 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "Swift/Swift-Bridging-Header.h";
+			};
+			name = Release;
+		};
 		05B647FD16B85AF90050002D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -509,7 +780,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support/SPAsync-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = SPAsync;
+				PRODUCT_NAME = SPAsync;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -522,46 +794,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support/SPAsync-Prefix.pch";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = SPAsync;
+				PRODUCT_NAME = SPAsync;
 				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		05B6480316B85AF90050002D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Support/SPAsync-Prefix.pch";
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
-				INFOPLIST_FILE = "SPAsyncTests/SPAsyncTests-Info.plist";
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		05B6480416B85AF90050002D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Support/SPAsync-Prefix.pch";
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
-				INFOPLIST_FILE = "SPAsyncTests/SPAsyncTests-Info.plist";
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -575,10 +810,6 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode46.app/Contents/Developer/Library/Frameworks\"",
-				);
 				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -608,10 +839,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_APPS_DIR)/Xcode46.app/Contents/Developer/Library/Frameworks\"",
-				);
 				FRAMEWORK_VERSION = A;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -628,6 +855,33 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		054B258219B3346900F61F64 /* Build configuration list for PBXNativeTarget "SPAsync (Mac)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				054B258319B3346900F61F64 /* Debug */,
+				054B258419B3346900F61F64 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		054B258519B3346900F61F64 /* Build configuration list for PBXNativeTarget "SPAsyncTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				054B258619B3346900F61F64 /* Debug */,
+				054B258719B3346900F61F64 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		058DBD1D199D43E8008F7741 /* Build configuration list for PBXNativeTarget "SwiftDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				058DBD1E199D43E8008F7741 /* Debug */,
+				058DBD1F199D43E8008F7741 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		05B647D416B85AF90050002D /* Build configuration list for PBXProject "SPAsync" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -637,20 +891,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		05B647FF16B85AF90050002D /* Build configuration list for PBXNativeTarget "SPAsync" */ = {
+		05B647FF16B85AF90050002D /* Build configuration list for PBXNativeTarget "SPAsync (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				05B6480016B85AF90050002D /* Debug */,
 				05B6480116B85AF90050002D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		05B6480216B85AF90050002D /* Build configuration list for PBXNativeTarget "SPAsyncTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				05B6480316B85AF90050002D /* Debug */,
-				05B6480416B85AF90050002D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
