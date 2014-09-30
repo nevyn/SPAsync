@@ -26,6 +26,13 @@ func taskize<P1, P2, R1 : AnyObject> (
 	}
 }
 
+class Hello {
+	func slowAddition(a: Int, b: Int, callback: (sum: NSNumber, error: NSError?) -> Void) {
+		let sum = a + b
+		callback(sum: NSNumber(integer: sum), error: nil)
+	}
+}
+
 // Calling a function with three parameters: two ints and a callback.
 slowAddition(4, 5) { (sum: NSNumber, error: NSError?) -> Void in
 	println("Look ma, callback summarized! \(sum)")
@@ -34,6 +41,11 @@ slowAddition(4, 5) { (sum: NSNumber, error: NSError?) -> Void in
 // Creating and calling a function with two parameters (two ints) that returns a task!
 taskize(slowAddition)(4, 5).addCallback({ (sum: AnyObject!) -> () in
 	println("Look ma, future summarized! \(sum)")
+})
+
+let hello = Hello()
+taskize(hello.slowAddition)(4, 6).addCallback({ (sum: AnyObject!) -> () in
+	println("From an object even! \(sum)")
 })
 
 NSRunLoop.mainRunLoop().runUntilDate(NSDate(timeIntervalSinceNow: 0.1))
