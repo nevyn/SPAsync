@@ -8,41 +8,135 @@
 
 import Foundation
 
-public class Task<T> : NSObject {
+public class Task<T>
+{
+	// MARK: Public interface: Callbacks
 	
-	// public
-	func addCallback(callback: (T -> Void)) -> Self
+	public func addCallback(callback: (T -> Void)) -> Self
 	{
 		return addCallback(on:dispatch_get_main_queue(), callback: callback)
 	}
 	
-	func addCallback(on queue: dispatch_queue_t, callback: (T -> Void)) -> Self
+	public func addCallback(on queue: dispatch_queue_t, callback: (T -> Void)) -> Self
 	{
 		return self
 	}
 	
-	func addErrorCallback(callback: (NSError! -> Void)) -> Self
+	public func addErrorCallback(callback: (NSError! -> Void)) -> Self
 	{
 		return addErrorCallback(on:dispatch_get_main_queue(), callback:callback)
 	}
-	func addErrorCallback(on queue: dispatch_queue_t, callback: (NSError! -> Void)) -> Self
+	public func addErrorCallback(on queue: dispatch_queue_t, callback: (NSError! -> Void)) -> Self
 	{
 		return self
 	}
 	
-	// private
-	var callbacks : [(T -> Void)] = []
-	var errbacks : [(NSError! -> Void)] = []
-	var finallys : [(Bool -> Void)] = []
+	public func addFinallyCallback(callback: (Bool -> Void)) -> Self
+	{
+		return addFinallyCallback(on:dispatch_get_main_queue(), callback:callback)
+	}
+	public func addFinallyCallback(on queue: dispatch_queue_t, callback: (Bool -> Void)) -> Self
+	{
+		return self
+	}
+	
+	
+	// MARK: Public interface: Advanced callbacks
+	
+	public func then<T2>(callback: (T -> T2)) -> Task<T2>
+	{
+		return then(on:dispatch_get_main_queue(), callback: callback)
+	}
+	public func then<T2>(on queue:dispatch_queue_t, callback: (T -> T2)) -> Task<T2>
+	{
+		return Task<T2>()
+	}
+	
+	public func then<T2>(callback: (T -> Task<T2>)) -> Task<T2>
+	{
+		return then(on:dispatch_get_main_queue(), callback: callback)
+	}
+	public func then<T2>(on queue:dispatch_queue_t, callback: (T -> Task<T2>)) -> Task<T2>
+	{
+		return Task<T2>()
+	}
+	
+	/// Transforms Task<Task<T2>> into a Task<T2> asynchronously
+	public func chain<T2>() -> Task<T2>
+	{
+		return Task<T2>()
+	}
+	
+	
+	// MARK: Public interface: Cancellation
+	
+	public func cancel()
+	{
+		var shouldCancel = false
+		synchronized(self) { () -> Void in
+			shouldCancel = !self.isCancelled
+			self.isCancelled = true
+		}
+		
+		if shouldCancel {
+			self.source!.cancel()
+			// break any circular references between source<> task by removing
+			// callbacks and errbacks which might reference the source
+			synchronized(self) {
+				self.callbacks.removeAll(keepCapacity: false)
+				self.errbacks.removeAll(keepCapacity: false)
+				
+			}
+
+		}
+		
+	}
+	
+	public private(set) var isCancelled = false
+	
+	
+	// MARK: Public interface: construction
+	
+	class func performWork(on queue:dispatch_queue_t, work: Void -> T) -> Task<T>
+	{
+		return Task<T>()
+	}
+	
+	class func fetchWork(on queue:dispatch_queue_t, work: Void -> Task<T>) -> Task<T>
+	{
+		return Task<T>()
+	}
+	
+	class func delay(interval: NSTimeInterval, value : T) -> Task<T>
+	{
+		return Task<T>()
+	}
+	
+	class func completedTask(value: T) -> Task<T>
+	{
+		return Task<T>()
+	}
+	
+	class func failedTask(error: NSError!) -> Task<T>
+	{
+		return Task<T>()
+	}
+	
+	
+	// MARK: Private implementation
+	
+	var callbacks : [TaskCallbackHolder<T -> Void>] = []
+	var errbacks : [TaskCallbackHolder<NSError! -> Void>] = []
+	var finallys : [TaskCallbackHolder<Bool -> Void>] = []
 	var isCompleted = false
-	var isCancelled = false
-	var completedValue : T? = nil // !! crashes compiler
+
+	var completedValue : T? = nil
 	var completedError : NSError? = nil
 	weak var source : TaskCompletionSource<T>?
 	
 	func completeWithValue(value: T)
 	{
-	
+		
 	}
 	func failWithError(err: NSError!)
 	{
@@ -50,6 +144,7 @@ public class Task<T> : NSObject {
 	}
 }
 
+// MARK:
 public class TaskCompletionSource<T> : NSObject {
 	public override init()
 	{
@@ -101,6 +196,17 @@ public class TaskCompletionSource<T> : NSObject {
 			callback()
 		}
 	}
+}
+
+class TaskCallbackHolder<T>
+{
+	init(on queue:dispatch_queue_t, callback: T) {
+		callbackQueue = queue
+		self.callback = callback
+	}
+	
+	var callbackQueue : dispatch_queue_t
+	var callback : T
 }
 
 func synchronized(on: AnyObject, closure: () -> Void) {
