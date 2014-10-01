@@ -108,10 +108,10 @@
 {
     SPA_NS(TaskCompletionSource) *source = [SPA_NS(TaskCompletionSource) new];
 		
-		if([tasks count] == 0) {
-		    [source completeWithValue:@[]];
-				return source.task;
-		}
+	if([tasks count] == 0) {
+		[source completeWithValue:@[]];
+			return source.task;
+	}
     
     NSMutableArray *values = [NSMutableArray new];
     NSMutableSet *remainingTasks = [NSMutableSet setWithArray:tasks];
@@ -222,6 +222,7 @@
         
         [_callbacks removeAllObjects];
         [_errbacks removeAllObjects];
+		[_finallys removeAllObjects];
     }
 }
 @end
