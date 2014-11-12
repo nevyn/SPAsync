@@ -26,7 +26,7 @@ static void *kContext = &kContext;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
 	if(context != kContext)
-		return [super addObserver:keyPath forKeyPath:object options:change context:context];
+		return [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 	
 	id newValue = [object valueForKeyPath:keyPath];
 	if([newValue isEqual:self.value])
