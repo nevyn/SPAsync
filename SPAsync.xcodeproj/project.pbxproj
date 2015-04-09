@@ -416,7 +416,7 @@
 		05B647D116B85AF90050002D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0620;
+				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = ThirdCog;
 				TargetAttributes = {
 					054B257319B3346800F61F64 = {
