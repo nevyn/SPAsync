@@ -43,6 +43,14 @@ taskize(slowAddition)(4, 5).addCallback({ (sum: Int) -> () in
 	println("Look ma, future summarized! \(sum)")
 })
 
+let taskedAddition = taskize(slowAddition)
+let task1 = taskedAddition(4, 5)
+let task2 = taskedAddition(7, 8)
+Task<Int>.awaitAll([task1, task2]).addCallback({ (sums: [Any]) -> Void in
+	println("The sums! \(sums)")
+})
+
+
 let hello = Hello()
 taskize(hello.slowAddition)(4, 6).addCallback({ (sum: Int) -> () in
 	println("From an object even! \(sum)")
