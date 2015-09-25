@@ -1,0 +1,51 @@
+SLUG Lightning 2015 notes
+
+Hello SLUG! I'm nevyn, and I'm very honored to get to show you my hacks. I usually do my stupid shit using the Objective-C runtime, as I've done for years at Spotify, and now for a few years at Lookback. One of my favorite pieces of ObjC is my work on SPAsync, which is a light-weight promises and async primitives library. A while ago, I ported it to Swift and found some interesting uses, which I'd love to show you.
+
+First some concepts. One of my least favorite code smells is deeply nested scopes, and in particular the callback-in-a-callback. There are three problem areas.
+
+* Error handling. Like the if-success-else-error pattern, it moves the error handling code as far away from the source of the error as possible, which is very difficult to read and follow. The more we nest the callbacks, the worse this error becomes.
+* Cancellation. Each API has a different way of handling cancellation, and if you're between callbacks, you'll need to add your own cancellation code as well.
+* It's very difficult to write code with multiple dependencies, e g if you're waiting for task A and B to finish before you can do C. This gets much worse with error handling.
+
+In short, this is a situation that requires abstraction. A single concept that abstracts the four concepts "a value I will get in the future", error handling, cancellation, and dependencies between asynchronous tasks.
+
+Both GCD and NSOperationQueue can give you a rather awkward API for working with these four concepts, but they're really models for concurrency rather than for asynchrony. In particular, NSOperation does not abstract “value in the future”. Apple tried to convince us otherwise with the “Advanced Operations” talk this year at WWDC, but: Like, if NSOperation was a great way of modeling asynchronous tasks, why doesn't EVERY iOS API return an NSOperation for any asynchronous task, like animation, network operations, file operations, user interactions? NSOperationQueue is more useful to indicate where you want to concurrently run your work.
+
+This is where third party libraries like ReactiveCocoa step in. RAC has great abstractions for these four concepts, but also does a lot more that you might not want for your app. RAC is inspired from the Reactive Extensions library in C#, and it turns out that C# has a lot of other nice libraries for async, such as the Task class. A Task can also be called a "promise" or a "future", and is a single class that encompasses all four concepts, and is very composable and nice to design apps with.
+
+To me, this is the missing piece in iOS development. KVO gives us generic value change callbacks to ANY iOS code, which is amazingly powerful and allows us to layer even more powerful tools on top of it, like RAC. If Apple incorporated promises into the standard libraries, we could have a way to abstract callbacks altogether throughout the platform, and we could build great tools on top of it.
+
+The next best thing is for myself to build it, I ported the C# class to Objective-C, and then to swift. Let's take a look.
+
+* First there's a factory API to create and complete tasks, and this is separate from the Task itself so that the producer and consumer of a task don't interfere with each other. It's not very interesting.
+
+* Here's the Task class itself, templated on the type of the future value. There's no way to synchronously get the value, because that could only be implemented using locking. Instead, there are callbacks for getting a value, an error, and one that runs in both cases, even on cancellation. If I stopped here, imagine how nice that would be! A single generic way of adding callbacks to any asynchronous task anywhere! Even multiple callbacks if you need it!
+
+* I digress. Next up is a way of expressing dependencies, by chaining tasks together. This is where the type signatures start getting hairy. The first variant lets you work on a value once it comes in, and yielding a derived value; such as parsing network data once it comes in into a model object. If you already have a parser method that returns a task, you can use the second variant.
+
+I'll show you. Let's fetch a network resource, parse it, and then update the UI. In scenario A, we have a synchronous 'parse' function. It's slow, so we're calling then with a background queue. 'then' returns a brand new Task, which we add a callback to, that is called once we're done parsing the model. We can then update the UI with it.
+
+In scenario B, parse already returns a Task because it itself has an internal worker queue. We can just give it to then, and then will give us a new Task that represents first fetching the network resource, then parsing it with the parser. We add a callback to it that updates the UI.
+
+Here I'm also showing a really nice thing that Swift does that ObjC doesn't. Since function pointers, method pointers and blocks are the same thing, we can just give it an existing method instead of creating an anonymous block. I like it.
+
+Let's finish up with some niceties. cancel lets us cancel a whole chain of tasks with a single call. awaitAll lets us wait for the value of several tasks in one go. Here's a not very nice example because it FIRST downloads all the images, then parses them, but it's really nice that a single line can cancel all of those operations.
+
+Now that we got all the basic functionality down, let's look at the really fun stuff that happens once you try to use the Swift type system to generically wrap existing callback-based APIs. SPTask contains Task.wrap, which takes a callback-based function and returns a task-based function.
+
+For example, we can wrap sendAsynchronousRequest, so that we get an alternative version that instead of taking a completionHandler, it returns a Task. We can then call it like any other function, and it is automatically and type-safely wrapped.
+
+I'm used to doing that kind of stuff in Objective C, but there we have no type safety. In Swift, we can to a higher order function transformation and retain all the type information. How'd you even do that? Let's look at the glorious prototype. Unfortunately Swift doesn't have variadic generics, so this one is hard-coded for two parameters. What we have here is a function that takes a asyncFunction that takes two parameters and a callback that takes a return value and an error. The callback and the asyncFunction both return nothing. The wrap function itself however, returns a new function. This new function takes the same two parameters as asyncFunction, but instead of taking a callback, it returns a Task, parameterized with the same type as the parameter type of the callback. Kind of scary-looking, but actually rather straightforward.
+
+In the implementation, we're creating a task factory, and returning the new task-oriented function. It in turn just calls the original function, implements the callback, and signals the task to complete or fail, based on the values we get.
+
+
+
+I did a variant of this presentation the first time a few years ago, and afterwards someone came up to me and told me that I had rediscovered the monad. I hadn't done enough functional back then to understand what he meant, and I still haven't quite, but I'm starting to realize that you could probably express all of these concepts much more functionally and much nicer. I guess I'll have to come back here when that happens :)
+
+If you want to read more about my thoughts on asynchrony, I have an extremely ranty article called "Methods of Concurrency" (at http://overooped.com/post/41803252527/methods-of-concurrency), which I invite you to read. I'm also working on a follow-up, detailing the very very juicy runtime hackery that a version of the "await" feature from C# ported to Objective-C entails..
+
+There's also PromiseKit, which is very similar to what I just presented.
+
+You can reach me on Twitter, and I believe we have a few minutes for QA. Thank you for listening.
