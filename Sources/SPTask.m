@@ -305,6 +305,29 @@
         return value;
     } on:dispatch_get_global_queue(0, 0)];
 }
+
+- (instancetype)recover:(SPTaskRecoverCallback)recoverer on:(dispatch_queue_t)queue
+{
+    SPA_NS(TaskCompletionSource) *source = [SPA_NS(TaskCompletionSource) new];
+    SPA_NS(Task) *chain = source.task;
+    [_childTasks addObject:chain];
+    
+    [self addErrorCallback:^(NSError *error) {
+        SPA_NS(Task) *workToBeProvided = recoverer(error);
+        if(!workToBeProvided) {
+            [source failWithError:error];
+        } else {
+            [chain->_childTasks addObject:workToBeProvided];
+            [source completeWithTask:workToBeProvided];
+        }
+    } on:queue];
+    [self addCallback:^(id value) {
+        [source completeWithValue:value];
+    } on:queue];
+
+    return chain;
+
+}
 @end
 
 @implementation SPA_NS(Task) (SPTaskConvenience)

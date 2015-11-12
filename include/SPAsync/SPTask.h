@@ -15,6 +15,8 @@ typedef id(^SPTaskThenCallback)(id value);
 typedef id(^SPTaskWorkGeneratingCallback)();
 typedef SPA_NS(Task*)(^SPTaskTaskGeneratingCallback)();
 typedef SPA_NS(Task)*(^SPTaskChainCallback)(id value);
+typedef SPA_NS(Task)*(^SPTaskRecoverCallback)(NSError *error);
+
 
 /** @class SPTask
     @abstract Any asynchronous operation that someone might want to know the result of.
@@ -102,6 +104,12 @@ typedef SPA_NS(Task)*(^SPTaskChainCallback)(id value);
             then into `Thing` through addCallback.
   */
 - (instancetype)chain;
+
+/** @method recover:on:
+    If the receiver fails, this callback will be called as if it was an error callback.
+    If it returns a new SPTask, its completion will determine the completion of the returned
+    task. If it returns nil, the original error will be propagated. */
+- (instancetype)recover:(SPTaskRecoverCallback)recoverer on:(dispatch_queue_t)queue;
 @end
 
 

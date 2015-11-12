@@ -155,6 +155,27 @@
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
 }
 
+- (void)testRecoverSuccess
+{
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    [source failWithError:[NSError errorWithDomain:@"lol" code:4 userInfo:nil]];
+    
+    SPAssertTaskCompletesWithValueAndTimeout([source.task recover:^SPTask*(NSError *err) {
+        return [SPTask completedTask:@6];
+    } on:dispatch_get_main_queue()], @6, 0.1);
+}
+
+- (void)testRecoverFailure
+{
+    SPTaskCompletionSource *source = [SPTaskCompletionSource new];
+    NSError *err = [NSError errorWithDomain:@"lol" code:4 userInfo:nil];
+    [source failWithError:err];
+    
+    SPAssertTaskFailsWithErrorAndTimeout([source.task recover:^SPTask*(NSError *err) {
+        return nil;
+    } on:dispatch_get_main_queue()], err, 0.1);
+}
+
 - (void)testTest
 {
     SPTaskCompletionSource *source = [SPTaskCompletionSource new];
