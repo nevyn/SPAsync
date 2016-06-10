@@ -6,8 +6,20 @@
 
 #import <Foundation/Foundation.h>
 #import <SPAsync/SPAsyncNamespacing.h>
+
+#pragma mark Boring build time details (scroll down for actual interface)
+/*
+    For wrapping SPTask in binary libraries (read: Lookback) without conflicting with SPTask's existance in the app that
+    uses the library, the binary library can change the name of this class to something else (such as LBTask) by defining
+    the macro `-DSPASYNC_NAMESPACE=LB` at build time in that project.
+*/
 @class SPA_NS(Task);
 
+/*
+    For backwards compatibility with ObjC before lightweight generics, these macros allow us to define
+    SPTask with generics support only if it's available. In this case, whenever you see SPA_GENERIC_TYPE(PromisedType)
+    as a parameter or return value, pretend that it just says `id`.
+*/
 #if __has_feature(objc_generics)
 #   define SPA_GENERIC(class, ...)      class<__VA_ARGS__>
 #   define SPA_GENERIC_TYPE(type)       type
@@ -16,8 +28,42 @@
 #   define SPA_GENERIC_TYPE(type)       id
 #endif
 
+#pragma mark - SPTask and friends!
+
 /** @class SPTask
-    @abstract Any asynchronous operation that someone might want to know the result of.
+    @abstract Wraps any asynchronous operation that someone might want to know the result of in the future.
+    
+    You can use SPTask in any place where you'd traditionally use a callback.
+    
+    Instead of doing a Pyramid Of Doom like this:
+ 
+    [thing fetchNetworkThingie:url callback:^(NSData *data) {
+        [AsyncJsonParser parse:data callback:^(NSDictionary *parsed) {
+            [_database updateWithData:parsed callback:^(NSError *err) {
+                if(err)
+                    ... and it just goes on...
+            }];
+            // don't forget error handling here
+        }];
+        // don't forget error handling here too
+    }];
+    
+    you can get a nice chain of things like this:
+    
+    [[[[[thing fetchNetworkThingie:url] chain:^(NSData *data) {
+        return [AsyncJsonParser parse:data];
+    }] chain:^(NSDictionary *parsed) {
+        return [_database updateWithData:data];
+    }] addCallback:^{
+        NSLog(@"Yay!");
+    }] addErrorCallback:^(NSError *error) {
+        NSLog(@"An error caught anywhere along the line can be handled here in this one place: %@", error);
+    }];
+    
+    That's nicer, yeah?
+    
+    By using task trees like this, you can make your interfaces prettier, make cancellation easier, centralize your
+    error handling, make it easier to work with dispatch_queues, and so on.
  */
 @interface SPA_GENERIC(SPA_NS(Task), PromisedType) : NSObject
 

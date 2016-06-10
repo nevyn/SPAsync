@@ -1,23 +1,54 @@
-SPAsync
-=======
-by Joachim Bengtsson <joachimb@gmail.com>
+# SPAsync
 
-Tools for abstracting asynchrony in Objective-C. Read [the introductory blog entry](http://overooped.com/post/41803252527/methods-of-concurrency) for much more detail.
+by Nevyn Joachim Bengtsson <nevyn.jpg@gmail.com>
 
-SPTask
-------
+Tools for abstracting asynchrony in Objective-C. Read [the introductory blog post](http://overooped.com/post/41803252527/methods-of-concurrency) for much more detail. SPTask is the most interesting tool in here.
 
-System.Threading.Tasks.Task in .Net is very nice. It's a standard library class representing any asynchronous operation that yields a single value. This is deceivingly simple, and gives you much more power of abstraction than you would initially believe.
+## SPTask
 
-SPTask is a minimal copy of .Net Task in Objective-C, with functionality to chain multiple asynchronous operations. You can think of it as an extremely lightweight ReactiveCocoa.
+Wraps any asynchronous operation or value that someone might want to know the result of, or get the value of, in the future.
+    
+You can use SPTask in any place where you'd traditionally use a callback.
 
-SPAgent
--------
+Instead of doing a Pyramid Of Doom like this:
+
+    [thing fetchNetworkThingie:url callback:^(NSData *data) {
+        [AsyncJsonParser parse:data callback:^(NSDictionary *parsed) {
+            [_database updateWithData:parsed callback:^(NSError *err) {
+                if(err)
+                    ... and it just goes on...
+            }];
+            // don't forget error handling here
+        }];
+        // don't forget error handling here too
+    }];
+
+you can get a nice chain of things like this:
+
+    [[[[[thing fetchNetworkThingie:url] chain:^(NSData *data) {
+        return [AsyncJsonParser parse:data];
+    }] chain:^(NSDictionary *parsed) {
+        return [_database updateWithData:data];
+    }] addCallback:^{
+        NSLog(@"Yay!");
+    }] addErrorCallback:^(NSError *error) {
+        NSLog(@"An error caught anywhere along the line can be handled here in this one place: %@", error);
+    }];
+
+That's nicer, yeah?
+
+By using task trees like this, you can make your interfaces prettier, make cancellation easier, centralize your
+error handling, make it easier to work with dispatch_queues, and so on.
+
+
+SPTask is basically a copy of System.Threading.Tasks.Task in .Net. It's a standard library class representing any asynchronous operation that yields a single value. This is deceivingly simple, and gives you much more power of abstraction than you would initially believe. You can think of it as an extremely lightweight ReactiveCocoa, in a single file.
+
+
+## SPAgent
 
 An experimental multithreading primitive. The goal is to make every "manager" style class multithreaded with its own work queue, and then make communication between these agents trivial.
 
-SPAwait
--------
+## SPAwait
 
 Experimental copy of C# 5's "await" keyword, using the preprocessor.
 
