@@ -30,7 +30,7 @@
 @implementation SPA_NS(Task)
 @synthesize cancelled = _isCancelled;
 
-- (id)initFromSource:(SPA_NS(TaskCompletionSource)*)source;
+- (instancetype)initFromSource:(SPA_NS(TaskCompletionSource)*)source;
 {
     if(!(self = [super init]))
         return nil;
@@ -392,7 +392,7 @@
     NSMutableArray *_cancellationHandlers;
 }
 
-- (id)init
+- (instancetype)init
 {
     if(!(self = [super init]))
         return nil;

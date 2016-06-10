@@ -8,20 +8,28 @@
 #import <SPAsync/SPAsyncNamespacing.h>
 @class SPA_NS(Task);
 
-typedef void(^SPTaskCallback)(id value);
-typedef void(^SPTaskErrback)(NSError *error);
-typedef void(^SPTaskFinally)(BOOL cancelled);
-typedef id(^SPTaskThenCallback)(id value);
-typedef id(^SPTaskWorkGeneratingCallback)();
-typedef SPA_NS(Task*)(^SPTaskTaskGeneratingCallback)();
-typedef SPA_NS(Task)*(^SPTaskChainCallback)(id value);
-typedef SPA_NS(Task)*(^SPTaskRecoverCallback)(NSError *error);
-
+#if __has_feature(objc_generics)
+#   define SPA_GENERIC(class, ...)      class<__VA_ARGS__>
+#   define SPA_GENERIC_TYPE(type)       type
+#else
+#   define SPA_GENERIC(class, ...)      class
+#   define SPA_GENERIC_TYPE(type)       id
+#endif
 
 /** @class SPTask
     @abstract Any asynchronous operation that someone might want to know the result of.
  */
-@interface SPA_NS(Task) : NSObject
+@interface SPA_GENERIC(SPA_NS(Task), PromisedType) : NSObject
+
+typedef void(^SPTaskCallback)(SPA_GENERIC_TYPE(PromisedType) value);
+typedef void(^SPTaskErrback)(NSError *error);
+typedef void(^SPTaskFinally)(BOOL cancelled);
+typedef id(^SPTaskThenCallback)(SPA_GENERIC_TYPE(PromisedType) value);
+typedef id(^SPTaskWorkGeneratingCallback)();
+typedef SPA_NS(Task*)(^SPTaskTaskGeneratingCallback)();
+typedef SPA_NS(Task)*(^SPTaskChainCallback)(SPA_GENERIC_TYPE(PromisedType) value);
+typedef SPA_NS(Task)*(^SPTaskRecoverCallback)(NSError *error);
+
 
 /** @method addCallback:on:
     Add a callback to be called async when this task finishes, including the queue to
@@ -113,7 +121,7 @@ typedef SPA_NS(Task)*(^SPTaskRecoverCallback)(NSError *error);
 @end
 
 
-@interface SPA_NS(Task) (SPTaskConvenience)
+@interface SPA_GENERIC(SPA_NS(Task), PromisedType) (SPTaskConvenience)
 
 /** @method performWork:onQueue:
     Convenience method to do work on a specified queue, completing the task with the value
@@ -129,7 +137,7 @@ typedef SPA_NS(Task)*(^SPTaskRecoverCallback)(NSError *error);
     with specified complete value.
     @return A new task delayed task.
   */
-+ (instancetype)delay:(NSTimeInterval)delay completeValue:(id)completeValue;
++ (instancetype)delay:(NSTimeInterval)delay completeValue:(SPA_GENERIC_TYPE(PromisedType))completeValue;
 
 /** @method delay:
     Create a task that will complete after the specified time interval with
@@ -142,7 +150,7 @@ typedef SPA_NS(Task)*(^SPTaskRecoverCallback)(NSError *error);
 	Convenience method for when an asynchronous caller happens to immediately have an
 	available value.
 	@return A new task with a completed value. */
-+ (instancetype)completedTask:(id)completeValue;
++ (instancetype)completedTask:(SPA_GENERIC_TYPE(PromisedType))completeValue;
 
 /** @method failedTask:
 	Convenience method for when an asynchronous caller happens to immediately knows it
@@ -155,17 +163,17 @@ typedef SPA_NS(Task)*(^SPTaskRecoverCallback)(NSError *error);
 /** @class SPTaskCompletionSource
     Task factory for a single task that the caller knows how to complete/fail.
   */
-@interface SPA_NS(TaskCompletionSource) : NSObject
+@interface SPA_GENERIC(SPA_NS(TaskCompletionSource), PromisedType) : NSObject
 /** The task that this source can mark as completed. */
-- (SPA_NS(Task)*)task;
+- (SPA_GENERIC(SPA_NS(Task), PromisedType)*)task;
 
 /** Signal successful completion of the task to all callbacks */
-- (void)completeWithValue:(id)value;
+- (void)completeWithValue:(SPA_GENERIC_TYPE(PromisedType))value;
 /** Signal failed completion of the task to all errbacks */
 - (void)failWithError:(NSError*)error;
 
 /** Signal completion for this source's task based on another task. */
-- (void)completeWithTask:(SPA_NS(Task)*)task;
+- (void)completeWithTask:(SPA_GENERIC(SPA_NS(Task), PromisedType)*)task;
 
 /** Returns a block that when called calls completeWithValue:nil.
     @example
@@ -175,7 +183,7 @@ typedef SPA_NS(Task)*(^SPTaskRecoverCallback)(NSError *error);
 */
 - (dispatch_block_t)voidResolver;
 /** Returns a block that when called calls completeWithValue: with its first parameter*/
-- (void(^)(id))resolver;
+- (void(^)(SPA_GENERIC_TYPE(PromisedType)))resolver;
 
 /** If the task is cancelled, your registered handlers will be called. If you'd rather
     poll, you can ask task.cancelled. */
