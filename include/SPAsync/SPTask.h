@@ -237,6 +237,17 @@ typedef SPA_NS(Task)*(^SPTaskRecoverCallback)(NSError *error);
 @end
 
 
+@interface SPA_NS(Task) (Testing)
+
+/** Check a task's completed state.
+    @warning This is intended for testing purposes only, and it is not recommended to use
+             this property as a means to do micro optimizations for synchronous code.
+ 
+    @return  Whether or not the receiver has been completed with a value or error. */
+@property(getter=isCompleted,readonly) BOOL completed;
+
+@end
+
 /** Convenience holder of a callback and the queue that the callback should be called on */
 @interface SPA_NS(CallbackHolder) : NSObject
 - (id)initWithCallback:(SPTaskCallback)callback onQueue:(dispatch_queue_t)callbackQueue;
