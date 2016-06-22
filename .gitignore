@@ -1,0 +1,14 @@
+build/
+xcuserdata
+Pods
+Podfile.lock
+Packages
+*.dylib
+*.bundle
+*.bundle.tgz
+*.codekit
+*.xcworkspacedata
+*.xccheckout
+*.xcscmblueprint
+
+.DS_Store
