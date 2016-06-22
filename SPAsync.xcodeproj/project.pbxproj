@@ -416,6 +416,7 @@
 		05B647D116B85AF90050002D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = ThirdCog;
 				TargetAttributes = {

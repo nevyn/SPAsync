@@ -14,13 +14,12 @@
     NSMutableArray *_errbacks;
     NSMutableArray *_finallys;
     NSMutableArray *_childTasks;
-    BOOL _isCompleted;
-	BOOL _isCancelled;
     id _completedValue;
     NSError *_completedError;
     __weak SPA_NS(TaskCompletionSource) *_source;
 }
 @property(getter=isCancelled,readwrite) BOOL cancelled;
+@property(getter=isCompleted,readwrite) BOOL completed;
 @end
 
 @interface SPA_NS(TaskCompletionSource) ()
@@ -29,6 +28,7 @@
 
 @implementation SPA_NS(Task)
 @synthesize cancelled = _isCancelled;
+@synthesize completed = _isCompleted;
 
 - (instancetype)initFromSource:(SPA_NS(TaskCompletionSource)*)source;
 {

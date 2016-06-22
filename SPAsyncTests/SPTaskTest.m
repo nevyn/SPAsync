@@ -19,7 +19,9 @@
     __block BOOL firstCallbackTriggered = NO;
     __block BOOL secondCallbackTriggered = NO;
     
+    __weak __typeof(task) weakTask = task;
     [task addCallback:^(id value) {
+        XCTAssertTrue(weakTask.isCompleted, @"Should be completed by the time the first callback fires.");
         XCTAssertEqualObjects(value, @(1337), @"Unexpected value");
         XCTAssertEqual(firstCallbackTriggered, NO, @"Callback should only trigger once");
         firstCallbackTriggered = YES;
@@ -41,7 +43,7 @@
     
     XCTAssertEqual(firstCallbackTriggered, YES, @"First callback should have triggered");
     XCTAssertEqual(secondCallbackTriggered, YES, @"Second callback should have triggered");
-    
+    XCTAssertTrue(task.isCompleted, @"Completion state not altered by callbacks.");
 }
 
 - (void)testErrback
@@ -52,7 +54,9 @@
     __block BOOL firstErrbackTriggered = NO;
     __block BOOL secondErrbackTriggered = NO;
     
+    __weak __typeof(task) weakTask = task;
     [task addErrorCallback:^(NSError *error) {
+        XCTAssertTrue(weakTask.isCompleted, @"Should be completed by the time the first callback fires.");
         XCTAssertEqual(error.code, (NSInteger)1337, @"Unexpected error code");
         XCTAssertEqual(firstErrbackTriggered, NO, @"Errback should only trigger once");
         firstErrbackTriggered = YES;
@@ -74,6 +78,7 @@
     
     XCTAssertEqual(firstErrbackTriggered, YES, @"First errback should have triggered");
     XCTAssertEqual(secondErrbackTriggered, YES, @"Second errback should have triggered");
+    XCTAssertTrue(task.isCompleted, @"Completion state not altered by callbacks.");
 }
 
 - (void)testLateCallback
