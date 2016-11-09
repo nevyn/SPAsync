@@ -154,6 +154,10 @@
 
 - (void)completeWithValue:(id)value
 {
+    if([value isKindOfClass:[NSError class]]) {
+        return [self failWithError:value];
+    }
+
     NSAssert(!_isCompleted, @"Can't complete a task twice");
     if(_isCompleted)
         return;

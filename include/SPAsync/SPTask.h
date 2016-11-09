@@ -213,7 +213,9 @@ typedef SPA_NS(Task)*(^SPTaskRecoverCallback)(NSError *error);
 /** The task that this source can mark as completed. */
 - (SPA_GENERIC(SPA_NS(Task), PromisedType)*)task;
 
-/** Signal successful completion of the task to all callbacks */
+/** Signal successful completion of the task to all callbacks.
+    NOTE: If you pass an NSError, this call will forward to failWithError:
+ */
 - (void)completeWithValue:(SPA_GENERIC_TYPE(PromisedType))value;
 /** Signal failed completion of the task to all errbacks */
 - (void)failWithError:(NSError*)error;
