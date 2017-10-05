@@ -443,7 +443,7 @@
     } copy];
 }
 
-- (void)addCancellationCallback:(void(^)())cancellationCallback
+- (void)addCancellationCallback:(void(^)(void))cancellationCallback
 {
     [_cancellationHandlers addObject:cancellationCallback];
 }

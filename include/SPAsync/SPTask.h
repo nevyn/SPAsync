@@ -71,8 +71,8 @@ typedef void(^SPTaskCallback)(SPA_GENERIC_TYPE(PromisedType) value);
 typedef void(^SPTaskErrback)(NSError *error);
 typedef void(^SPTaskFinally)(BOOL cancelled);
 typedef id(^SPTaskThenCallback)(SPA_GENERIC_TYPE(PromisedType) value);
-typedef id(^SPTaskWorkGeneratingCallback)();
-typedef SPA_NS(Task*)(^SPTaskTaskGeneratingCallback)();
+typedef id(^SPTaskWorkGeneratingCallback)(void);
+typedef SPA_NS(Task*)(^SPTaskTaskGeneratingCallback)(void);
 typedef SPA_NS(Task)*(^SPTaskChainCallback)(SPA_GENERIC_TYPE(PromisedType) value);
 typedef SPA_NS(Task)*(^SPTaskRecoverCallback)(NSError *error);
 
@@ -235,7 +235,7 @@ typedef SPA_NS(Task)*(^SPTaskRecoverCallback)(NSError *error);
 
 /** If the task is cancelled, your registered handlers will be called. If you'd rather
     poll, you can ask task.cancelled. */
-- (void)addCancellationCallback:(void(^)())cancellationCallback;
+- (void)addCancellationCallback:(void(^)(void))cancellationCallback;
 @end
 
 

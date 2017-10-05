@@ -417,7 +417,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = ThirdCog;
 				TargetAttributes = {
 					054B257319B3346800F61F64 = {
