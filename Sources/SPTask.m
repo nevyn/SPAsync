@@ -48,7 +48,7 @@
         if(_isCompleted) {
             if(!_completedError) {
                 dispatch_async(queue, ^{
-                    callback(_completedValue);
+                    callback(self->_completedValue);
                 });
             }
         } else {
@@ -69,7 +69,7 @@
         if(_isCompleted) {
             if(_completedError) {
                 dispatch_async(queue, ^{
-                    errback(_completedError);
+                    errback(self->_completedError);
                 });
             }
         } else {
@@ -89,7 +89,7 @@
     @synchronized(_callbacks) {
         if(_isCompleted) {
             dispatch_async(queue, ^{
-                finally(_isCancelled);
+                finally(self->_isCancelled);
             });
         } else {
             [_finallys addObject:[[SPA_NS(CallbackHolder) alloc] initWithCallback:(id)finally onQueue:queue]];
@@ -450,7 +450,7 @@
 
 - (void)cancel
 {
-    for(void(^cancellationHandler)() in _cancellationHandlers)
+    for(void(^cancellationHandler)(void) in _cancellationHandlers)
         cancellationHandler();
 }
 
