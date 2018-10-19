@@ -155,7 +155,7 @@
 - (void)completeWithValue:(id)value
 {
     if([value isKindOfClass:[NSError class]]) {
-        return [self failWithError:value];
+        return [self failWithError:value ignoreIfAlreadyCompleted:NO];
     }
 
     NSAssert(!_isCompleted, @"Can't complete a task twice");
@@ -194,9 +194,11 @@
     }
 }
 
-- (void)failWithError:(NSError*)error
+- (void)failWithError:(NSError*)error ignoreIfAlreadyCompleted:(BOOL)ignoreSubsequentValues
 {
-    NSAssert(!_isCompleted, @"Can't complete a task twice");
+    if(!ignoreSubsequentValues) {
+        NSAssert(!_isCompleted, @"Can't complete a task twice");
+    }
     if(_isCompleted)
         return;
     
@@ -415,9 +417,14 @@
     [self.task completeWithValue:value];
 }
 
+- (void)failWithError:(NSError*)error ignoreIfAlreadyCompleted:(BOOL)ignoreSubsequentValues
+{
+    [self.task failWithError:error ignoreIfAlreadyCompleted:ignoreSubsequentValues];
+}
+
 - (void)failWithError:(NSError*)error
 {
-    [self.task failWithError:error];
+    [self failWithError:error ignoreIfAlreadyCompleted:NO];
 }
 
 - (void)completeWithTask:(SPA_NS(Task)*)task
@@ -425,7 +432,7 @@
     [[task addCallback:^(id value) {
         [self.task completeWithValue:value];
     } on:dispatch_get_global_queue(0, 0)] addErrorCallback:^(NSError *error) {
-        [self.task failWithError:error];
+        [self.task failWithError:error ignoreIfAlreadyCompleted:NO];
     } on:dispatch_get_global_queue(0, 0)];
 }
 

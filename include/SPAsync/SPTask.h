@@ -213,12 +213,24 @@ typedef SPA_NS(Task)*(^SPTaskRecoverCallback)(NSError *error);
 /** The task that this source can mark as completed. */
 - (SPA_GENERIC(SPA_NS(Task), PromisedType)*)task;
 
-/** Signal successful completion of the task to all callbacks.
+/**
+    Signal successful completion of the task to all callbacks. Asserts
+    if you try to complete or fail more than once.
     NOTE: If you pass an NSError, this call will forward to failWithError:
  */
 - (void)completeWithValue:(SPA_GENERIC_TYPE(PromisedType))value;
-/** Signal failed completion of the task to all errbacks */
+/**
+    Signal failed completion of the task to all errbacks. Asserts if you
+    try to complete or fail more than once.
+*/
 - (void)failWithError:(NSError*)error;
+/**
+    Same as failWithError:, except that if you send YES to ignoreSubsequentValues,
+    subsequent errors will be ignored instead of asserting. Use if it's not an error
+    in your code to fail for multiple different and it's okay if upstream code doesn't
+    know which one of the errors is the "real" or "important" one.
+*/
+- (void)failWithError:(NSError*)error ignoreIfAlreadyCompleted:(BOOL)ignoreSubsequentValues;
 
 /** Signal completion for this source's task based on another task. */
 - (void)completeWithTask:(SPA_GENERIC(SPA_NS(Task), PromisedType)*)task;
